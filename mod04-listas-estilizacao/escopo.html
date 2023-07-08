@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4: Listas e Estilização</title>
+</head>
+<body>
+
+<h2>Módulo 4: Listas e Estilização</h2>
+<p>15 aulas </p>
+
+<pre>
+
+#8: Iniciando um projeto com Next
+    sudo npm install --location=global creat-next-app
+    npx create-next-app
+    code react-modulo4-listas-estilizacao
+    npm run dev
+
+<hr>
+<h3 id="id1">#1: Estilizando inline</h3>
+const App = () => {
+    return (
+      &lt;div className="w-screen h-screen flex justify-center items-center">
+  
+        &lt;button style={{
+          backgroundColor: '#f00',
+          color: '#fff',
+          padding: '3px 15px',
+          borderRadius: '10px'
+        }}>Clique aqui&lt;/button>
+  
+      &lt;/div>
+    );
+  
+  }
+  
+  export default App;
+
+<hr>
+<h3 id="id2">#2: Estilizando inline dinamicamente</h3>
+"use client"
+
+import { useState } from "react";
+
+const App = () => {
+
+  const [clicado, setClicado] = useState(false);
+
+  const handleClick = () => {
+    setClicado(!clicado);
+  }
+
+  return (
+    &lt;div className="w-screen h-screen flex justify-center items-center">
+
+      &lt;button onClick={handleClick} style={{
+        backgroundColor: !clicado ? '#f00' : '#000',
+        color: '#fff',
+        padding: '3px 15px',
+        borderRadius: '10px'
+      }}>Clique aqui&lt;/button>
+
+    &lt;/div>
+  );
+
+}
+
+export default App;
+<hr>
+<h3 id="id3">#3: Estilizando com Stylesheet</h3>
+---------
+exemplo 1
+---------
+import './style.css';
+
+&lt;button onClick={handleClick} className="botao">Clique aqui</button>
+
+
+---------
+exemplo 2
+---------
+page/
+-- import { Botao } from '../components/Botao'
+
+src/components 
+-- Botao/
+---- index.tsx 
+---- style.css
+
+
+---------
+exemplo 3
+---------
+page/
+-- import { Botao } from '../components/Botao'
+
+src/components 
+-- Botao/
+---- index.tsx 
+---- style.css
+
+<hr>
+<h3 id="id4">#4: Estilizando com CSS Modules</h3>
+
+----------
+components/Botao/
+----------
+import styles from './styles.module.css';
+
+export const Botao = () => {
+    return(
+      &lt;button className={styles.botao}>Clique aqui</button>
+    );
+}
+
+<hr>
+<h3 id="id5">#5: Introdução ao Styled Components</h3>
+https://styled-components.com/
+
+<a href="https://styled-components.com/" target="_blank">https://styled-components.com/</a>
+
+
+# with npm
+npm install styled-components
+
+Se der erro:
+npm ERR! Cannot read properties of null (reading 'edgesOut')
+
+USAR: 'npm config set legacy-peer-deps true'
+Em seguida tentar instalar novamente
+
+Em seguida instalar o types dessa biblioteca:
+npm install -D @types/styled-components
+
+Não é necessário fazer nenhuma configuração extra.
+
+
+
+<hr>
+<h3 id="id6">#6: Criando componentes com Styled Components</h3>
+----- 
+mod04-listas-estilizacao/mod04-listas-estilizacao/src/app/page.tsx
+----- 
+
+"use client"
+
+// import { Container, Botao } from './PageStyles';
+import * as C from './PageStyles'; 
+
+const App = () => {
+  return (
+    &lt;C.Container>
+      Texto do componente
+      &lt;C.Botao>Clique aqui&lt;/C.Botao>
+    &lt;/C.Container>
+  );
+
+}
+
+export default App;
+
+----- 
+mod04-listas-estilizacao/mod04-listas-estilizacao/src/app/PageStyles.ts
+----- 
+import styled from "styled-components";
+
+export const Container = styled.div`
+    background-color: blue;
+    color: white;
+    padding: 20px;
+`;
+
+export const Botao = styled.button`
+    font-size: 40px;
+    padding: 3px 15px;
+    margin: 0 10px;
+    background: seagreen;
+    border-radius: 15px;
+`; 
+
+
+<hr>
+<h3 id="id7">#7: Passando props dinâmicas ao Styled</h3>
+
+<hr>
+<h3 id="id8">#8: Estilizando filhos do componente</h3>
+
+<hr>
+<h3 id="id9">#9: Responsividade com Styled</h3>
+---------
+mod04-listas-estilizacao/mod04-listas-estilizacao/src/app/PageStyles.ts
+---------
+import styled from "styled-components";
+
+
+type ContainerProps = {
+    cor?: string;
+} 
+
+export const Container = styled.div<ContainerProps>`
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: ${props => props.cor};
+    color: white;
+    padding: 20px;
+
+    span {
+        font-weight: bold;
+        color: #000;
+    }
+
+    .link {
+        color: #fff;
+
+        &:hover{ 
+            color: #f00;
+        }
+    }
+    
+    @media(max-width: 600px){
+        display: flex;
+        flex-direction:column;
+    
+
+    }
+`;
+
+type BotaoProps = {
+    bg: string;
+    small?: boolean;
+} 
+
+export const Botao = styled.button<BotaoProps>`
+    font-size: ${props => props.small ? '15px' : '30px'};
+    padding: 3px 15px;
+    margin: 0 10px;
+    background: ${props => props.bg};
+    border-radius: 15px;
+`; 
+
+<hr>
+<h3 id="id10">#10: Instalando TailwindCSS em projeto Vite</h3>
+aula10-tailwindCSS-vite
+
+https://vitejs.dev/config/
+
+$ npm create vite
+- react 
+- typescript
+ cd <pasta do projeto>
+ npm install 
+ npm run dev
+
+
+https://tailwindcss.com/docs/guides/vite
+
+npm create vite@latest my-project -- --template react
+cd my-project
+
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+<hr>
+<h3 id="id11">#11: Instalando TailwindCSS em projeto CRA</h3>
+
+<hr>
+<h3 id="id12">#12: Usando o TailwindCSS na prática</h3>
+
+<hr>
+<h3 id="id13">#13: Responsividade no TailwindCSS</h3>
+
+<hr>
+<h3 id="id14">#14: Hover e estados no TailwindCSS</h3>
+
+<hr>
+<h3 id="id15">#15: Usando a documentação do TailwindCSS</h3>
+
+</pre>
+
+<script>
+    window.onload = (event) => {
+        gotoScroll('#id10');
+    };
+    function gotoScroll(elemento){
+        console.log("page is fully loaded");
+        console.log(document.querySelector(elemento).offsetTop);
+        window.scrollTo(0, document.querySelector(elemento).offsetTop);
+        document.querySelector('#bt-reload').innerHTML = `reload scrolltop ${elemento}`;
+    }
+</script>
+<button id="bt-reload" onclick="gotoScroll('#id10');" style="position:fixed; right:20px;top:20px;">reload scrolltop</button>
+
+
+
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 2: (NOVO) Primeiros Passos no React novo</title>
+    <style>
+        body{ font-family: "Helvetica Neue", Helvetica, sans-serif; }
+        hr{ border-color: lightsalmon; border-top: 0; }
+    </style>
+</head>
+<body>
+
+    <h1>Módulo 2: (NOVO) Primeiros Passos no React novo</h1>
+    <p>18 aulas</p>
+
+<pre>
+
+<hr>
+<h3>#1: Primeiro Componente</h3>
+const Page = () => {
+    // function Page() {
+        return (
+            &lt;div&gt;
+                &lt;h1 className="color: red;"&gt;Olá mundo&lt;/h1&gt;
+                &lt;p&gt;algum outro texto&lt;/p&gt;
+            &lt;/div&gt;
+            
+        );
+    }
+    
+    export default Page;
+
+<hr>
+<h3>#2: Exportando e Importando um Componente</h3>
+existem 2 formas
+a diferença entre os dois está justamente na hora de importar
+
+
+export const Square = () => {
+    return (
+        &lt;div className="w-52 h-52 bg-orange-700 text-white"&gt;
+            Texto qualquer inspirador
+        &lt;/div&gt;
+    );
+}
+
+export const Circle = () => {
+    return(
+        &lt;div className="w-52 h-52 bg-orange-700 text-white rounded-full"&gt;
+            Texto qualquer inspirador
+        &lt;/div&gt;
+    );
+}
+
+---
+
+import { Circle, Square } from "@/components/Geo";
+
+
+const Page = () => {
+    return (
+        &lt;div&gt;
+            &lt;h1 className="color: red;"&gt;Olá mundo&lt;/h1&gt;
+            &lt;p&gt;algum outro texto&lt;/p&gt;
+
+            &lt;Square /&gt;
+            &lt;Circle /&gt;
+            
+
+        &lt;/div&gt;
+        
+    );
+}
+
+export default Page;
+
+
+<hr>
+<h3>#3: Usando vários componentes</h3>
+
+<hr>
+<h3>#4: Regras gerais do JSX</h3>
+import { Person } from "@/components/Person";
+
+const Page = () => {
+    return (
+        &lt;div&gt;
+            &lt;h1 className="color: red;"&gt;Olá mundo&lt;/h1&gt;
+            &lt;p&gt;algum outro texto&lt;/p&gt;
+
+            &lt;Person /&gt;
+
+            {/* ISSO NÃO É HTML */}
+            {/* ISSO É JSX */}
+
+        &lt;/div&gt;
+        
+    );
+}
+
+export default Page;
+
+---
+
+export const Person = () =&gt; {
+    return(
+        &lt;&gt; 
+            {/* fragment */}
+            &lt;h1&gt;Elon Musk&lt;/h1&gt;
+            &lt;img src="" alt="Elon Musk" className='w-40' /&gt; {/* todas as tags precisam fechar */}
+            &lt;ul&gt;
+                &lt;li&gt;CEO da Tesla&lt;/li&gt;
+                &lt;li&gt;CEO da SpaceX&lt;/li&gt;
+                &lt;li&gt;CEO da ...&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/&gt;
+    );
+}
+
+
+<hr>
+<h3>#5: JSX e variáveis, funções e objetos</h3>
+
+<hr>
+<h3>#6: Passando props para um componente</h3>
+PAGE
+----
+&lt;Person
+name="Ellon Musk"
+avatar="https://cdn.mos.cms.futurecdn.net/8hBsu6KV4QMdTMkuZ6cRM.jpg"
+roles={['CEO da Tesla','CEO da SpaceX']}
+/>
+
+---
+COMPONENT
+---
+const getWeekday = (today: Date) => {
+    return new Intl.DateTimeFormat('pt-BR', { weekday:'long' }).format(today);
+}
+
+type Props = {
+    name: string;
+    avatar: string;
+    roles: string[];
+    address?: string;
+}
+
+export const Person = ({ name, avatar, roles, address}: Props) => {
+
+    const today: Date =  new Date();
+
+    return(
+        &lt;>
+            &lt;div className="p-3">
+                {/* fragment */}
+                &lt;h1 style={{ color: 'red', fontWeight:'bold' }}>{name} - {getWeekday(today)}&lt;/h1>
+                &lt;img 
+                    src={avatar} 
+                    alt={name} 
+                    className='w-40' /> {/* todas as tags precisam fechar */}
+                &lt;ul>
+                    &lt;li>{roles[0]}&lt;/li>
+                    &lt;li>{roles[1]}&lt;/li>
+                &lt;/ul>
+            &lt;/div>
+        &lt;/>
+    );
+}
+
+
+<hr>
+<h3>#7: Definindo um padrão em props</h3>
+<strong>?</strong>
+type Props = {
+    name: string;
+    avatar?: string;
+    roles: string[];
+    address?: string;
+}
+
+<hr>
+<h3>#8: Children do componente</h3>
+o CHILDREN basicamente é o que vai permitir
+o componente receber outros conteúdos dentro dele
+não apenas via Props por exemplo.
+
+<Card>
+    <>
+        <h3 className="text-3xl font-bold italic">"Frase de efeito"</h3>
+        <p className="text-right text-sm">Autor desconhecido</p>
+    </>
+</Card>
+
+--- Card.tsx
+import { ReactNode } from "react";
+
+type Props = {
+    children: ReactNode;
+}
+
+export const Card = ({children}: Props) => {
+    return (
+        <div className="w-96 border-2 border-red-500 p-3 text-2x text-center italic">
+            {children}
+        </div>
+    );
+}
+
+<hr>
+<h3>#9: Renderização Condicional</h3>
+
+type Props = {
+    frase: string;
+    autor?: string;
+}
+
+export const Card = ({frase, autor}: Props) => {
+    
+    return (
+        &lt;div className="w-96 border-2 border-red-500 p-3 text-2x text-center italic">
+            &lt;h3 className="text-3xl font-bold italic">{frase}&lt;/h3>
+            &lt;p className="text-right text-sm">- {autor ?? 'Autor desconhecido'}&lt;/p>
+        &lt;/div>
+    );
+
+}
+---
+
+            &lt;p className="text-right text-sm">- {autor ? autor : 'Autor desconhecido'}&lt;/p>
+----
+export const Card = ({frase, autor}: Props) => {
+
+    if(autor !== undefined){
+        return (
+            &lt;div className="w-96 border-2 border-red-500 p-3 text-2x text-center italic">
+                &lt;h3 className="text-3xl font-bold italic">{frase}&lt;/h3>
+                &lt;p className="text-right text-sm">- {autor}&lt;/p>
+            &lt;/div>
+        );
+    }
+    
+    return (
+        &lt;div className="w-96 border-2 border-red-500 p-3 text-2x text-center italic">
+            &lt;h3 className="text-3xl font-bold italic">{frase}&lt;/h3>
+            &lt;p className="text-right text-sm">- Autor desconhecido&lt;/p>
+        &lt;/div>
+    );
+}
+
+<hr>
+<h3>#10: Operador lógico &&</h3>
+Útil para show/hide de elementos do site.
+
+&lt;Card frase="Alguma frase top" />
+
+---
+
+export const Card = ({frase, autor}: Props) => {
+    return (
+        &lt;div className="w-96 border-2 border-red-500 p-3 text-2x text-center italic">
+            &lt;h3 className="text-3xl font-bold italic">{frase}&lt;/h3>
+            {autor &&
+                &lt;p className="text-right text-sm">- {autor}&lt;/p>
+            }
+        &lt;/div>
+    );
+}
+<hr>
+<h3>#11: Renderizando Listas</h3>
+TYPE
+----
+export type Person = {
+    id: number;
+    nome: string;
+    profissao: string;
+} 
+
+DATA
+---- 
+import { Person } from "@/types/Person";
+
+export const peopleList: Person[] = [
+    {id: 1, nome: 'Fulano', profissao: 'Matemático'},
+    {id: 2, nome: 'Ciclano', profissao: 'Químico'},
+    {id: 3, nome: 'Beltrano', profissao: 'Psicólogo'},
+    {id: 4, nome: 'Glutano', profissao: 'Químico'},
+    {id: 5, nome: 'Jungulano', profissao: 'Astrofísico'},
+    {id: 6, nome: 'Jorge', profissao: 'Floricultor'}
+];
+
+PAGE
+---- 
+import { peopleList } from "@/data/PeopleList";
+
+const Page = () => {
+
+    return (
+        &lt;div>
+            &lt;h1 className="color: red;">Olá mundo&lt;/h1>
+            &lt;p className="mb-5">algum outro texto&lt;/p>
+
+            {peopleList.length > 0 &&
+                &lt;ul>
+                    {peopleList.map( pessoa => &lt;li key={pessoa.id}>{pessoa.nome} - {pessoa.profissao}&lt;/li> )}
+                &lt;/ul>
+            }
+
+        &lt;/div>
+        
+    );
+}
+
+export default Page;
+<hr>
+<h3>#12: Filtrando Listas</h3>
+
+import { peopleList } from "@/data/PeopleList";
+
+const Page = () => {
+
+    const quimicos = peopleList.filter(pessoa => pessoa.profissao === 'Químico');
+
+    return (
+        &lt;div>
+            &lt;h1 className="color: red;">Olá mundo&lt;/h1>
+            &lt;p className="mb-5">algum outro texto&lt;/p>
+            
+            {quimicos.length > 0 &&
+                &lt;>
+                    &lt;h3>Lista de químicos:&lt;/h3>
+                    &lt;ul>
+                        {quimicos.map(pessoa => &lt;li>{pessoa.nome}&lt;/li>)}
+                    &lt;/ul>
+                &lt;/>
+            }
+
+        &lt;/div>
+        
+    );
+}
+
+
+<hr>
+<h3>#13: Exercício: Greeting condicional 1</h3>
+export const Greeting1 = () => {
+
+    const horario = new Intl.DateTimeFormat('pt-BR', { 
+        timeStyle: 'short',
+        hour12: false
+    }).format();
+
+    // const hora = new Date().getHours();
+    const hora: number = Math.floor(Math.random() * 24);
+
+    // const hora = new Date().setHours(hh);
+    const minutos = new Date().getMinutes();
+    // const hora = 8;
+    // const hora = 13;
+    // const hora = 21;
+    let saudacao = '';
+
+    if (hora >= 0 && hora < 12){
+        saudacao = 'Bom dia  :D';
+    } else if(hora >= 12 && hora < 18) {
+        saudacao = 'Boa tarde  ;)';
+    } else if(hora >= 18 && hora < 24) {
+        saudacao = 'Boa noite  :)';
+    }
+    
+    return(
+        &lt;div 
+            className="
+                absolute inset-x-0 inset-y-0 bg-gradient-to-r from-sky-500 to-indigo-500
+                flex flex-col justify-center items-center text-white
+            ">
+                &lt;div className="text-9xl">{horario}&lt;/div>
+                {/* &lt;div className="text-9xl">{hora}:{minutos}&lt;/div> */}
+                &lt;div className="text-4xl">{saudacao}&lt;/div>
+        &lt;/div>
+    );
+}
+
+<hr>
+<h3>#14: Exercício: Greeting condicional 2</h3>
+export const Greeting1 = () => {
+
+    const horario = new Intl.DateTimeFormat('pt-BR', { 
+        timeStyle: 'short',
+        hour12: false
+    }).format();
+
+    const hora = new Date().getHours();
+    // const hora: number = Math.floor(Math.random() * 24);
+    // const hora = new Date().setHours(hh);
+    // const minutos = new Date().getMinutes();
+    // const hora = 8;
+    // const hora = 13;
+    // const hora = 21;
+
+    return(
+        &lt;div 
+            className="
+                absolute inset-x-0 inset-y-0 bg-gradient-to-r from-sky-500 to-indigo-500
+                flex flex-col justify-center items-center text-white
+            ">
+                &lt;div className="text-9xl">{horario}&lt;/div>
+                &lt;div className="text-4xl">
+                    {hora >= 0 && hora &lt; 12 && 'Bom dia  :D'}
+                    {hora >= 12 && hora &lt; 18 && 'Boa tarde  ;)'}
+                    {hora >= 18 && hora &lt; 24 && 'Boa noite  :)'}
+                &lt;/div>
+        &lt;/div>
+    );
+}
+
+<hr>
+<h3>#15: Exercício: Rating via emoji (fácil)</h3>
+PAGE 
+---- 
+import { Ratings } from "@/components/Ratings";
+
+const Page = () => {
+
+    return (
+        &lt;div className="w-screen h-screen flex justify-center items-center bg-amber-400">
+
+            &lt;Ratings nota={0} />
+
+        &lt;/div>
+    );
+}
+
+export default Page;
+
+
+--- 
+COMPONENT 
+---
+
+type Props = {
+    nota?: number;
+}
+
+export const Ratings = ({nota = 0}: Props) => {
+    if(nota > 5) nota = 5;
+    if(nota < 0) nota = 0;
+    // 😶
+    // 😀
+
+    const notaInt: number = Math.floor(nota);
+
+    const estrelas = '😀'.repeat(notaInt) + '😶'.repeat(5 - notaInt);
+
+    return (
+        &lt;div className="flex items-center text-4xl">
+            &lt;div className="p-2 bg-lime-200	rounded-lg">{nota?.toFixed(1)}&lt;/div>
+            &lt;div className="m-3">{estrelas}&lt;/div>
+        &lt;/div>
+    );
+}
+
+<hr>
+<h3>#16: Exercício: Rating via emoji (difícil)</h3>
+
+type Props = {
+    nota?: number;
+}
+
+export const Ratings = ({nota = 0}: Props) => {
+    if(nota > 5) nota = 5;
+    if(nota < 0) nota = 0;
+
+    const emojis = ['','👹','🤮','😯','😬','😍']
+    // 👹
+    // 🤮
+    // 😯
+    // 😬
+    // 😍
+
+    const notaInt: number = Math.floor(nota);
+
+    const estrelas = `${emojis[notaInt]}`.repeat(notaInt) + '😶'.repeat(5 - notaInt);
+
+    return (
+        &lt;div className="flex items-center text-4xl">
+            &lt;div className="p-2 bg-lime-200	rounded-lg">{nota?.toFixed(1)}&lt;/div>
+            &lt;div className="m-3">{estrelas}&lt;/div>
+        &lt;/div>
+    );
+}
+
+<hr>
+<h3>#17: Exercício: Tabela de notas estudantis 1</h3>
+
+<hr>
+<h3>#18: Exercício: Tabela de notas estudantis 2</h3>
+--- 
+PAGE 
+----
+import { TabelaNotas1 } from "@/components/TabelaNotas1";
+import { students } from "@/data/students";
+
+const Page = () => {
+
+    return (
+        &lt;div
+            className="
+                bg-gradient-to-r from-sky-500 to-indigo-500
+                flex flex-col justify-center items-center text-white
+            ">
+            &lt;h2>Lista de estudantes&lt;/h2>
+            &lt;TabelaNotas1 students={students} />
+        &lt;/div>
+    );
+}
+
+export default Page;
+
+
+--- 
+COMPONENT
+---
+import { Student } from "@/types/Students";
+
+type Props = {
+    students: Student[];
+}
+
+export const TabelaNotas1 = ({ students }: Props) => {
+    return (
+        &lt;div>
+            &lt;table className="w-full border border-gray-600 rounded-md ">
+                &lt;thead>
+                    &lt;tr className="text-left border-b border-gray-600 bg-gray-600">
+                        &lt;th className="p-3">Nome&lt;/th>
+                        &lt;th className="p-3">Status&lt;/th>
+                        &lt;th className="p-3">Grade 1&lt;/th>
+                        &lt;th className="p-3">Grade 2&lt;/th>
+                        &lt;th className="p-3">Grade 3&lt;/th>
+                    &lt;/tr>
+                &lt;/thead>
+                &lt;tbody>
+                    {students.map(item => 
+                        &lt;tr key={item.id} className="text-gray-800 bg-gray-400 border-b border-gray-600">
+                            &lt;td className="p-3 flex item-center flex-col">
+                                &lt;img src={item.avatar} alt={item.name} className="w-10 h-10 rounded-full mr-3" />
+                                &lt;div>{item.name}&lt;/div>
+                                &lt;div>{item.email}&lt;/div>
+                            &lt;/td>
+                            &lt;td className="p-3">
+                                {item.active && &lt;div className="px-2 py-1 inline-block rounded-md border border-green-800 bg-green-400 text-white text-xs">ativo&lt;/div>}
+                                {!item.active && &lt;div className="px-2 py-1 inline-block rounded-md border border-red-800 bg-red-400 text-white text-xs">inativo&lt;/div>}
+                            &lt;/td>
+                            &lt;td className="p-3">{item.grade1.toFixed(1)}&lt;/td>
+                            &lt;td className="p-3">{item.grade2.toFixed(1)}&lt;/td>
+                            &lt;td className="p-3 font-bold">{item.active ? ((item.grade1 + item.grade2)/2).toFixed(1) : '--'}&lt;/td>
+                        &lt;/tr>
+                    )}
+                &lt;/tbody>
+            &lt;/table>
+        &lt;/div>
+    );
+}
+
+
+
+
+</pre>
+
+</body>
+</html>

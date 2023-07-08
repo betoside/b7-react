@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 6: Ciclo de vida, requisição e hooks avançados</title>
+</head>
+<body>
+
+    <h1>Módulo 6: Ciclo de vida, requisição e hooks avançados</h1>
+    <p>21 aulas</p>
+
+
+<pre>
+    
+    <h3 id="id1">#1: Ciclo de vida do componente</h3>
+    o primeiro dos componentes que vai ser renderizado é o proprio App.
+
+    a cada etapa existe uma ação que é executada, possível colocar código em cada ação.
+
+    o componente é criado na memória, então ele é renderizado na tela. isso é uma etapa.
+
+    renderizado, outra etapa.
+
+    se ele tem states ele vai mudar ao longo do tempo. valores etc.
+
+    a cada alteração é uma etapa, possível inserir código para ser executado.
+
+    e o último ciclo de vida é a morte. por exemplo sair da memória.
+
+    ---
+
+    aprender de passar informação/código de tela para tela, de componenete para componente.
+
+    ---
+
+    estrutura básica
+
+    ---
+
+    How to create React js app with TypeScript?
+
+    npx create-react-app mod06_ciclo_requisicao_hooks --template typescript
+
+    ---
+
+    Começar a usar um hook específico do react: useEffect
+
+    --- 
+
+    import { useEffect, useState } from 'react';
+
+    const App = () => {
+
+    const [name, setName] = useState&lt;string>('Bonieky');
+
+    useEffect(()=>{
+        alert('executou');
+    }, [name]);
+
+    const handleClick = () => {
+        setName('Pedro');
+    }
+
+    return (
+        &lt;div className="" style={{ backgroundColor:'#ff0000', padding:'20px' }}>
+        
+        Nome: {name}
+        &lt;br />
+        &lt;button onClick={handleClick}>Clique aqui&lt;/button>
+        
+        &lt;/div>
+    );
+    }
+
+    export default App;
+
+
+    <hr>
+    <h3 id="id2">#2: Usando useEffect na prática</h3>
+
+    import { ChangeEvent, useEffect, useState } from 'react';
+
+    const App = () => {
+    
+      const [name, setName] = useState&lt;string>('');
+      const [lastname, setLastName] = useState&lt;string>('');
+      const [fullname, setFullName] = useState&lt;string>('');
+      
+      useEffect(()=>{
+    
+        if(name && lastname){
+          setFullName(name + ' ' + lastname);
+        }
+    
+      }, [name, lastname]);
+    
+      const handleNameChange = (e: ChangeEvent&lt;HTMLInputElement>) => {
+        setName( e.target.value );
+      }
+    
+      const handleLastNameChange = (e: ChangeEvent&lt;HTMLInputElement>) => {
+        setLastName( e.target.value );
+      }
+    
+      return (
+        &lt;div className="" style={{ display:'flex', flexDirection:'column' }}>
+          
+          &lt;input type="text" placeholder='Digite seu NOME' value={name} onChange={handleNameChange} />
+          &lt;input type="text" placeholder='Digite seu SOBRENOME' value={lastname} onChange={handleLastNameChange} />
+    
+          &lt;p>Nome completo: {fullname}&lt;/p>
+        
+        &lt;/div>
+      );
+    }
+    
+    export default App;
+    
+
+    <hr>
+    <h3 id="id3">#3: Diferença entre Backend e Frontend</h3>
+    Conceito básico
+
+    React, comportamento padrão é funcionar no frontend, no browser
+
+    Backend, tudo que funciona em um servidor auxiliar.
+
+    Next.js, tem o 'server side render'
+
+    <hr>
+    <h3 id="id4">#4: Requisição GET simples 1</h3>
+
+    https://api.b7web.com.br/cinema/
+
+
+
+    <hr>
+    <h3 id="id5">#5: Requisição GET simples 2</h3>
+
+    import './index.css';
+    import { useState, useEffect } from 'react';
+    import { Movie } from './types/Movies'
+    
+    const App = () => {
+    
+      const [movies, setMovies] = useState&lt;Movie[]>([]);
+    
+      useEffect(()=>{
+        loadMovies();
+      }, []);
+    
+      const loadMovies = () => {
+        fetch('https://api.b7web.com.br/cinema/')
+          .then((response)=>{
+            return response.json()
+          })
+          .then((json)=>{
+            setMovies(json);
+          })
+      }
+    
+      return (
+        &lt;div style={{ padding:'20px'}}>
+    
+          &lt;button onClick={loadMovies}>Carregar filmes&lt;/button>
+          &lt;br />
+          &lt;br />
+    
+          total de filmes: {movies.length}
+    
+          &lt;div className='grid grid-cols-6 gap-3'>
+            {movies.map((item, index) => (
+              &lt;div key={index}>
+                &lt;img src={ item.avatar } alt="" className='w-32 block' />
+              &lt;/div>
+    
+            ))}
+          &lt;/div>
+    
+        &lt;/div>
+      );
+    }
+    
+    export default App;
+    
+    <hr>
+    <h3 id="id6">#6: Usando async/await no React</h3>
+
+    import './index.css';
+    import { useState, useEffect } from 'react';
+    import { Movie } from './types/Movies'
+
+    const App = () => {
+
+        const [movies, setMovies] = useState&lt;Movie[]>([]);
+
+        useEffect(()=>{
+            loadMovies();
+        }, []);
+
+        <strong>
+        const loadMovies = async () => {
+            let response = await fetch('https://api.b7web.com.br/cinema/');
+            let json = await response.json();
+            setMovies(json);
+        }
+        </strong>
+
+
+        return (
+            &lt;div style={{ padding:'20px'}}>
+
+            &lt;button onClick={loadMovies}>Carregar filmes&lt;/button>
+            &lt;br />
+            &lt;br />
+
+            total de filmes: {movies.length}
+
+            &lt;div className='grid grid-cols-6 gap-3'>
+                {movies.map((item, index) => (
+                &lt;div key={index}>
+                    &lt;img src={ item.avatar } alt="" className='w-32 block' />
+                &lt;/div>
+
+                ))}
+            &lt;/div>
+
+            &lt;/div>
+        );
+    }
+
+    export default App;
+
+    <hr>
+    <h3 id="id7">#7: Lidando com Loading</h3>
+
+    import './index.css';
+    import { useState, useEffect } from 'react';
+    import { Movie } from './types/Movies'
+    
+    const App = () => {
+    
+      const [movies, setMovies] = useState&lt;Movie[]>([]);
+      <strong>
+          const [loading, setLoading] = useState&lt;boolean>(false);
+      </strong>
+    
+      useEffect(()=>{
+        loadMovies();
+      }, []);
+    
+      const loadMovies = async () => {
+        setLoading(true);
+        let response = await fetch('https://api.b7web.com.br/cinema/');
+        let json = await response.json();
+        setLoading(false);
+        setMovies(json);
+      }
+    
+      return (
+        &lt;div style={{ padding:'20px'}}>
+    
+          &lt;button onClick={loadMovies}>Carregar filmes&lt;/button>
+    
+          &lt;br />&lt;br />
+    
+          <strong>
+          {loading &&
+            &lt;div>Carregando...&lt;/div>
+          }
+          </strong>
+    
+          <strong>
+          {!loading &&
+            &lt;div>
+              total de filmes: {movies.length}
+            &lt;/div>
+          }
+          </strong>
+    
+          &lt;div className='grid grid-cols-6 gap-3'>
+            {movies.map((item, index) => (
+              &lt;div key={index}>
+                &lt;img src={ item.avatar } alt="" className='w-32 block' />
+              &lt;/div>
+    
+            ))}
+          &lt;/div>
+    
+        &lt;/div>
+      );
+    }
+    
+    export default App;
+    
+
+    <hr>
+    <h3 id="id8">#8: Lidando com erros de requisição</h3>
+
+        -------------
+        ASYNC / AWAIT 
+        -------------
+
+            import './index.css';
+            import { useState, useEffect } from 'react';
+            import { Movie } from './types/Movies'
+            
+            const App = () => {
+            
+                const [movies, setMovies] = useState&lt;Movie[]>([]);
+                const [loading, setLoading] = useState&lt;boolean>(false);
+                
+                useEffect(()=>{
+                    loadMovies();
+                }, []);
+                
+                const loadMovies = async () => {
+                    try {
+                    setLoading(true);
+                    let response = await fetch('https://api.b7web.com.br/cinema');
+                    let json = await response.json();
+                    setLoading(false);
+                    setMovies(json);
+                    } catch(e) {
+                    // pego o erro em "e" e posso:
+                    setLoading(false); // parar carregamento
+                    setMovies([]);
+                    console.log(e);
+                    // alert('Erro'); // exibir erros
+                    // console.log('Erro');
+                    }
+                }
+                
+                return (
+                    &lt;div style={{ padding:'20px'}}>
+                
+                    &lt;button className='px-2 py-1 bg-sky-800 text-yellow-200 rounded-md hover:text-white' onClick={loadMovies}>Carregar filmes&lt;/button>
+                
+                    &lt;br />&lt;br />
+                
+                    {loading &&
+                        &lt;div>Carregando...&lt;/div>
+                    }
+                
+                    {!loading && movies.length > 0 &&
+                        &lt;>
+                        &lt;div>
+                            total de filmes: {movies.length}
+                        &lt;/div>
+                        &lt;br />
+                        &lt;div className='grid grid-cols-6 gap-3'>
+                            {movies.map((item, index) => (
+                            &lt;div key={index}>
+                                &lt;img src={ item.avatar } alt="" className='w-32 block' />
+                            &lt;/div>
+                
+                            ))}
+                        &lt;/div>
+                        &lt;/>
+                    }
+                
+                    {!loading && movies.length === 0 &&
+                        &lt;p>Alguma coisa aconteceu, tente mais tarde.&lt;/p>
+                    }
+                
+                
+                    &lt;/div>
+                );
+            }
+            
+            export default App;
+        
+
+        -------------
+        FETCH 
+        -------------
+
+        const loadMovies = () => {
+            fetch('https://api.b7web.com.br/cinema')
+              .then((response)=>{
+                return response.json()
+              })
+              .then((json)=>{
+                setMovies(json);
+              }) <strong>
+              .catch(( e )=>{
+                setLoading(false);
+                setMovies([]);
+                console.error(e);
+              });</strong>
+              
+          }
+    <hr>
+    <h3 id="id9">#9: JSON Placeholder</h3>
+
+    <a href="https://jsonplaceholder.typicode.com/" target="_blank">https://jsonplaceholder.typicode.com/</a>
+
+    Uma api para testar e prototipar.
+
+
+    <strong>Resources</strong>
+    JSONPlaceholder comes with a set of 6 common resources:
+    
+    /posts	100 posts
+    /comments	500 comments
+    /albums	100 albums
+    /photos	5000 photos
+    /todos	200 todos
+    /users	10 users
+
+    <strong>Routes</strong>
+    All HTTP methods are supported. You can use http or https for your requests.
+
+    GET	/posts
+    GET	/posts/1
+    GET	/posts/1/comments
+    GET	/comments?postId=1
+    POST	/posts
+    PUT	/posts/1
+    PATCH	/posts/1
+    DELETE	/posts/1
+
+    <hr>
+    <h3 id="id12">#10: Lendo informações do JSONPlaceholder</h3>
+
+    -------------
+    mod06-cicloVida-requisicao-hooks/mod06_ciclo_requisicao_hooks_ts/src/types/Posts.ts
+    -------------
+    export type Post = {
+        userId: number;
+        id: number;
+        title: string;
+        body: string;
+    }
+
+
+    -------------
+    mod06-cicloVida-requisicao-hooks/mod06_ciclo_requisicao_hooks_ts/src/App.tsx
+    -------------
+    import './index.css';
+    import { useState, useEffect } from 'react';
+    import { Post } from './types/Posts';
+    
+    const App = () => {
+    
+      const [posts, setPosts] = useState&lt;Post[]>([]);
+      const [loading, setLoading] = useState&lt;boolean>(false);
+    
+      useEffect(()=>{
+        loadPosts();    
+      }, []);
+    
+      const loadPosts = async ()=>{
+    
+        let response = await fetch('https://jsonplaceholder.typicode.com/posts/');
+        let json = await response.json();
+        setPosts(json);
+    
+      }
+    
+    
+      return (
+        &lt;div style={{ padding:'20px'}}>
+    
+          &lt;button className='px-2 py-1 bg-sky-800 text-yellow-200 rounded-md hover:text-white' onClick={loadPosts}>Carregar posts&lt;/button>
+    
+          &lt;br />&lt;br />
+    
+          {loading &&
+            &lt;div>Carregando...&lt;/div>
+          }
+    
+          {!loading && posts.length > 0 &&
+            &lt;>
+              &lt;div>
+                total de filmes: {posts.length}
+              &lt;/div>
+              &lt;br />
+              &lt;div className=''>
+                {posts.map((item, index) => (
+                  &lt;div key={index} className='my-4 p-5'>
+                    &lt;h4 className='font-bold p-5 bg-yellow-50 rounded-sm -ml-5'>{item.title}&lt;/h4>
+                    &lt;small>#{item.id} = Usuário: {item.userId}&lt;/small>
+                    &lt;p> {item.body} &lt;/p>
+                  &lt;/div>
+    
+                ))}
+              &lt;/div>
+            &lt;/>
+          }
+    
+          {!loading && posts.length === 0 &&
+            &lt;p>Não há posts para exibir&lt;/p>
+          }
+    
+    
+        &lt;/div>
+      );
+    }
+    
+    export default App;
+    
+
+
+    <hr>
+    <h3 id="id11">#11: Enviando requisições POST 1</h3>
+
+    <hr>
+    <h3 id="id12">#12: Enviando requisições POST 2</h3>
+
+    -------------
+    mod06-cicloVida-requisicao-hooks/mod06_ciclo_requisicao_hooks_ts/src/App.tsx
+    -------------
+    import './index.css';
+    import { useState, useEffect, ChangeEvent, TextareaHTMLAttributes } from 'react';
+    import { Post } from './types/Posts';
+
+    const App = () => {
+
+        const [posts, setPosts] = useState&lt;Post[]>([]);
+        const [loading, setLoading] = useState&lt;boolean>(false);
+
+        const [addTitleText, setAddTitleText] = useState('');
+        const [addBodyText, setAddBodyText] = useState('');
+
+
+        useEffect(()=>{
+            loadPosts();    
+        }, []);
+
+
+        const loadPosts = async ()=>{
+
+            setLoading(true);
+
+            let response = await fetch('https://jsonplaceholder.typicode.com/posts/');
+            let json = await response.json();
+            setPosts(json);
+
+            setLoading(false);
+
+        }
+
+        const handleAddTitleChange = (e: ChangeEvent&lt;HTMLInputElement>)=>{
+            setAddTitleText(e.target.value);
+        }
+        const handleAddBodyChange = (e: ChangeEvent&lt;HTMLTextAreaElement>)=>{
+            setAddBodyText(e.target.value);
+        }
+
+        const handleAddClick = async ()=>{
+            // alert(addTitleText + '  ::: ' + addBodyText );
+            if(addTitleText && addBodyText){
+
+            let response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                body: JSON.stringify({
+                title: addTitleText,
+                body: addBodyText,
+                userId: 1
+                }),
+                headers: {
+                'Content-type': 'application/json'
+                }
+            });
+            let json = await response.json();
+
+            // console.log('resposta: ', json);
+            if(json.id){
+                alert('Post adicionado com sucesso');
+            } else {
+                alert('Ocorreu algum erro');
+            }
+
+            } else {
+            alert('Preencha os dados')
+            }
+        }
+        
+
+
+        return (
+            &lt;div style={{ padding:'20px'}}>
+
+            &lt;fieldset className='border-2 mb-3 p-3'>
+                &lt;legend>Adicionar novo post&lt;/legend>
+
+                &lt;input 
+                className='block border mb-1 w-3/4' 
+                value={addTitleText} 
+                type="text" 
+                placeholder='Digite um título'
+                onChange={handleAddTitleChange}
+                />
+
+                &lt;textarea 
+                value={addBodyText} 
+                className='block border mb-1 w-3/4 h-145'
+                onChange={handleAddBodyChange}
+                >&lt;/textarea>
+                
+                &lt;button onClick={handleAddClick} className='block border bg-orange-950 text-white w-3/4 rounded-md'>Adicionar&lt;/button>
+            &lt;/fieldset>
+
+            &lt;button className='px-2 py-1 bg-sky-800 text-yellow-200 rounded-md hover:text-white' onClick={loadPosts}>Carregar posts&lt;/button>
+
+            &lt;br />&lt;br />
+
+            {loading &&
+                &lt;div>Carregando...&lt;/div>
+            }
+
+            {!loading && posts.length > 0 &&
+                &lt;>
+                &lt;div>
+                    total de filmes: {posts.length}
+                &lt;/div>
+                &lt;br />
+                &lt;div className=''>
+                    {posts.map((item, index) => (
+                    &lt;div key={index} className='my-4 p-5'>
+                        &lt;h4 className='font-bold p-5 bg-yellow-50 rounded-sm -ml-5'>{item.title}&lt;/h4>
+                        &lt;small>#{item.id} = Usuário: {item.userId}&lt;/small>
+                        &lt;p> {item.body} &lt;/p>
+                    &lt;/div>
+
+                    ))}
+                &lt;/div>
+                &lt;/>
+            }
+
+            {!loading && posts.length === 0 &&
+                &lt;p>Não há posts para exibir&lt;/p>
+            }
+
+
+            &lt;/div>
+        );
+    }
+
+    export default App;
+
+
+
+    -------------
+    mod06-cicloVida-requisicao-hooks/mod06_ciclo_requisicao_hooks_ts/src/types/Posts.ts
+    -------------
+
+    export type Post = {
+        userId: number;
+        id: number;
+        title: string;
+        body: string;
+    }
+
+
+
+    <hr>
+    <h3 id="id13">#13: Profissionalizando o projeto</h3>
+
+    <hr>
+    <h3 id="id14">#14: Profissionalizando as requisições</h3>
+
+    <hr>
+    <h3 id="id15">#15: Usando o Axios</h3>
+    <a href="https://axios-http.com/ptbr/docs/instance" target="_blank">https://axios-http.com/ptbr/docs/instance</a>
+
+    import axios from 'axios';
+
+    const BASE = 'https://jsonplaceholder.typicode.com';
+    
+    export const api = {
+        getAllPosts: async () => {
+    
+            let response = await axios.get(`${BASE}/posts`);
+            return response.data;
+
+        },
+        addnewPost: async (title: string, body: string, userId: number) => {
+    
+    
+            let response = await axios.post(`${BASE}/posts`, {
+                title, body, userId
+            });
+            return response.data;
+          
+        }
+    }
+
+    <hr>
+    <h3 id="id16">#16: Introdução aos Reducers 1</h3>
+
+    npx create-react-app mod0616_reducer --template typescript
+
+    cd mod0616_reducer
+    npm start
+
+    ---
+
+    
+
+    <hr>
+    <h3 id="id17">#17: Introdução aos Reducers 2</h3>
+    import { useReducer } from 'react';
+
+    type reducerState = {
+      count: number;
+    }
+    
+    type reducerAction = {
+      type: string;
+      // payload = carga
+    }
+    
+    const initialState = { count: 0 };
+    
+    const reducer = (state: reducerState, action: reducerAction) => {
+      switch(action.type){
+        case 'ADD':
+          // state.count += 1;
+          return { ...state, count: state.count + 1};
+          break;
+    
+        case 'DEL':
+          if(state.count > 0){
+            return { ...state, count: state.count - 1};
+          }
+          break;
+    
+        case 'RESET':
+          return initialState;
+          break;
+      }
+    
+      return state;
+    }
+    
+    const App = () => {
+    
+      const [state, dispatch] = useReducer(reducer, initialState);
+    
+      return(
+        &lt;div className='p-5'>
+          Contagem: {state.count}
+          &lt;hr />
+          &lt;button onClick={()=>dispatch({type: 'ADD'})}>Adicionar&lt;/button>
+          &lt;button onClick={()=>dispatch({type: 'DEL'})}>Remover&lt;/button>
+          &lt;button onClick={()=>dispatch({type: 'RESET'})}>Reset&lt;/button>
+    
+        &lt;/div>
+      );
+    }
+    
+    export default App;
+    <hr>
+    <h3 id="id18">#18: Organizando o Reducer Separado</h3>
+    -------------
+    mod06-cicloVida-requisicao-hooks/mod0616_reducer/mod0616_reducer/src/reducers/contagem.ts
+    -------------
+    import { useReducer } from 'react';
+
+    type reducerState = {
+        count: number;
+    }
+
+    type reducerAction = {
+        type: string;
+        // payload = carga
+    }
+
+    const initialState = { 
+        count: 0 
+    };
+
+    const reducer = (state: reducerState, action: reducerAction) => {
+        switch(action.type){
+            case 'ADD':
+            // state.count += 1;
+            return { ...state, count: state.count + 1};
+            break;
+
+            case 'DEL':
+            if(state.count > 0){
+                return { ...state, count: state.count - 1};
+            }
+            break;
+
+            case 'RESET':
+            return initialState;
+            break;
+        }
+
+        return state;
+    }
+
+    export const useContagem = () => {     
+
+        return useReducer(reducer, initialState);
+
+    }
+
+
+    -------------
+    mod06-cicloVida-requisicao-hooks/mod0616_reducer/mod0616_reducer/src/App.tsx
+    -------------
+    import { useContagem } from './reducers/contagem';
+
+    const App = () => {
+
+      const [contagem, contagemDispatch] = useContagem();
+
+      return(
+        &lt;div className='p-5'>
+          Contagem: {contagem.count}
+          &lt;hr />
+          &lt;button onClick={()=>contagemDispatch({type: 'ADD'})}>Adicionar&lt;/button>
+          &lt;button onClick={()=>contagemDispatch({type: 'DEL'})}>Remover&lt;/button>
+          &lt;button onClick={()=>contagemDispatch({type: 'RESET'})}>Reset&lt;/button>
+
+        &lt;/div>
+      );
+    }
+
+    export default App;
+
+    <hr>
+    <h3 id="id19">#19: Caso real de uso do useReducer 1</h3>
+    Nesse momento ele está quase pronto, foi criado:
+
+      o reducer 
+      o initialState 
+      os types 
+      até as ações 
+
+      Agora tem que juntar toda essa galera em:
+
+      -------------
+      /Applications/MAMP/htdocs/b7-react/mod06-cicloVida-requisicao-hooks/mod0616_reducer/mod0616_reducer/src/reducers/peopleList.ts
+      -------------
+
+      export const usePeopleList = () => {
+        return useReducer(reducer, initialState);
+      }
+
+
+    <hr>
+    <h3 id="id20">#20: Caso real de uso do useReducer 2</h3>
+
+    if(action.payload?.name){
+        const newState = [...state];
+        newState.push({
+            id: uuidv4(),
+            name: action.payload?.name
+        }); 
+        return newState;
+    }
+
+    <strong>o macete para quando o react nao entender na primeira vez que houve mudança no state</strong>
+
+    <hr>
+    <h3 id="id21">#21: Caso real de uso do useReducer 3</h3>
+
+    Agora fazer o processo de remoção dos itens da lista.
+
+    tem que fazer a mesma correção do item anterior.
+    porque está acontecendo que está sendo alterado o mesmo item que está sendo recebido
+    entao o react nao ta vendo alteracao no item mesmo, ele ta enxergando alteracao 
+    apenas dentro dele e aí ele não vai renderizar.
+
+
+    -------------
+    /Applications/MAMP/htdocs/b7-react/mod06-cicloVida-requisicao-hooks/mod0616_reducer/mod0616_reducer/src/reducers/peopleList.ts
+    -------------
+    import { useReducer } from "react";
+    import { v4 as uuidv4 } from 'uuid';
+    
+    
+    type Person = {
+        id: string;
+        name: string;
+    }
+    
+    type ActionType = {
+        type: string;
+        payload?: {
+            name?: string;
+            id?: string;
+        }
+    }
+    
+    const initialState: Person[] = [];
+    
+    const reducer = (state: Person[], action: ActionType) => {
+        switch(action.type){
+            case 'ADD':
+    
+                // como faz para adicionar uma pessoa na lista?
+                // primeiro precisa de uma biblioteca para gerar id unico (hash).
+                // parar a execução do servidor.
+                // instalar.
+                
+                // > npm install uuid
+        
+                // ele tem suporte para typescript então instalar tb:
+    
+                // > npm install -D @types/uuid
+    
+                // &lt;a href="https://www.npmjs.com/package/uuid" target="_blank">https://www.npmjs.com/package/uuid&lt;/a>
+    
+                if(action.payload?.name){
+                    const newState = [...state];
+                    newState.push({
+                        id: uuidv4(),
+                        name: action.payload?.name
+                    }); 
+                    return newState;
+                }
+    
+            break;
+    
+            case 'DEL':
+                if(action.payload?.id){
+                    let newState = [...state];
+                    newState = newState.filter(item => item.id !== action.payload?.id);
+                    return newState;
+                }
+    
+            break;
+    
+            case 'ORDER':
+                let newState = [...state];
+                newState = newState.sort((a,b) => (a.name > b.name) ? 1 : -1);
+                return newState;
+    
+            break;
+        }
+        return state;
+    
+    }
+    
+    export const usePeopleList = () => {
+        return useReducer(reducer, initialState);
+    }  
+
+
+    -------------
+    /Applications/MAMP/htdocs/b7-react/mod06-cicloVida-requisicao-hooks/mod0616_reducer/mod0616_reducer/src/App.tsx
+    -------------
+    import { ChangeEvent, useState } from 'react';
+    import { usePeopleList } from './reducers/peopleList'
+    
+    const App = () => {
+    
+      const [list, dispatch] = usePeopleList();
+      const [nameInput, setNameInput] = useState('');
+    
+      const handleAddButton = () => {
+        if(nameInput){
+          dispatch({
+            type: 'ADD',
+            payload: {
+              name: nameInput
+            }
+          });
+          setNameInput('');
+        }
+      }
+    
+      const handleInputChange = (e: ChangeEvent&lt;HTMLInputElement>) => {
+        setNameInput(e.target.value);
+    
+      }
+    
+      const deletePerson = (id: string) => {
+        dispatch({
+          type: 'DEL',
+          payload: { id }
+        });
+      }
+    
+      const handleOrderButton = () => {
+        dispatch({
+          type: "ORDER"
+        });
+      }
+    
+      return(
+        &lt;div className='p-5'>
+    
+          &lt;input type="text" value={nameInput} onChange={handleInputChange} />
+          &lt;button onClick={handleAddButton}>Adicionar&lt;/button>
+    
+          &lt;hr />
+    
+          &lt;button onClick={handleOrderButton}>Ordenar&lt;/button>
+    
+          &lt;hr />
+    
+          Lista de pessoas: &lt;br />
+    
+          &lt;ul>
+            {list.map((item, index) => (
+              &lt;li key={item.id}>
+                {item.name} 
+                &lt;button onClick={() => deletePerson(item.id)}>Deletar&lt;/button>
+              &lt;/li>
+            ))}
+          &lt;/ul>
+    
+        &lt;/div>
+      );
+    }
+    
+    export default App;    
+
+</pre>
+
+
+
+<script>
+    window.onload = (event) => {
+        gotoScroll('#id12');
+    };
+
+    function gotoScroll(elemento){
+        console.log("page is fully loaded");
+        console.log(document.querySelector(elemento).offsetTop);
+        window.scrollTo(0, document.querySelector(elemento).offsetTop);
+        document.querySelector('#bt-reload').innerHTML = `scrolltop ${elemento}`;
+    }
+
+    const montarNavItens = () => {
+
+        const newDiv = document.createElement("div");
+        newDiv.setAttribute("style", "padding:20px;background: rgba(0,0,0, .7); color:white; position:fixed; top:53px; right:20px; border-radius: 6px; cursor: pointer;");
+
+        let corpo = document.querySelector('body')
+        corpo.appendChild(newDiv);
+
+        const todosH3 = document.querySelectorAll('h3');
+
+        for (let x of todosH3) {
+            // console.log(x.id);
+            let newDivA = document.createElement("div");
+            newDivA.setAttribute('onclick',`gotoScroll('#${x.id}')`);
+            newDivA.innerHTML = `${x.innerHTML}`;
+            
+            newDiv.appendChild(newDivA);
+        }
+
+        corpo = document.querySelector('body')
+        corpo.appendChild(newDiv);
+    }
+    montarNavItens();
+
+</script>
+<!-- <button id="bt-reload" onclick="gotoScroll('#id12');" class="fixed px-3 py-1 rounded-lg right-5 top-5 bg-amber-600/50 text-ambar-950 ">reload scrolltop</button> -->
+<button id="bt-reload" onclick="gotoScroll('#id12');" style="position:fixed; right:20px;top:20px; background-color: rgb(217 119 6 / 0.5); padding-top: 0.25rem; padding-bottom: 0.25rem; padding-left: 0.75rem; padding-right: 0.75rem; border-radius: 0.5rem; cursor: pointer;">reload scrolltop</button>
+
+
+</body>
+</html>

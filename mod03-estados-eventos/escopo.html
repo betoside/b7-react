@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3: (NOVO) Estados e Eventos novo</title>
+</head>
+<body>
+    <h2>Módulo 3: (NOVO) Estados e Eventos novo</h2>
+    <p>16 aulas</p>
+
+    <pre>
+        #8: Iniciando um projeto com Next
+        sudo npm install --location=global creat-next-app
+        npx create-next-app
+        code react-modulo3-estados-eventos
+        npm run dev
+
+        daqui pra frente o nível de programaçao em react vai subir
+        tornar-se um programador bom, passo a passo
+        entendendo todas as vertentes
+        como fazer e como não fazer
+
+        aprender a trabalhar com eventos de click nesse momento
+        mas isso se extende a varios tipos de eventos diferentes
+        quando alguma coisa acontece apos o carregamento da pagina
+        o proprio carregamento da pagina é um evento
+
+        <hr>
+        <h3>#1: Adicionando evento de clique</h3>
+        "use client"
+
+        const Page = () => {
+        
+          const handleButtonClick = () => {
+            alert('Funcionou 4');
+          }
+        
+          return (
+            &lt;div className="w-screen h-screen flex justify-center items-center">
+              &lt;button onClick={handleButtonClick} className="p-3 bg-blue-700 hover:bg-black text-white rounded-md">Clique aqui&lt;/button>
+            &lt;/div>
+          );
+        }
+        
+        export default Page;
+        <hr>
+        <h3>#2: Forma errada de passar eventos</h3>
+        ---------------
+        Forma errada:
+        ---------------
+        onClick={handleButtonClick()}
+
+        ---------------
+        Forma correta:
+        ---------------
+        "use client"
+
+        const Page = () => {
+
+            const avisar = (msg: string) => {
+                alert(msg);
+            }
+
+            return (
+                &lt;div className="w-screen h-screen flex justify-center items-center">
+                    &lt;button onClick={() => avisar('Cliquei botao 1')} className="p-3 bg-blue-700 hover:bg-black text-white rounded-md">Clique aqui 1&lt;/button>
+                    &lt;button onClick={() => avisar('Cliquei botao 2')} className="m-3 p-3 bg-blue-700 hover:bg-black text-white rounded-md">Clique aqui 2&lt;/button>
+                &lt;/div>
+            );
+        }
+
+        export default Page;
+        
+        <hr>
+        <h3>#3: Passando eventos via props</h3>
+        -------
+        EXEMPLO 1: label do botao
+        -------
+        "use client"
+
+        import { CustomButton } from "@/components/CustomButton";
+
+        const Page = () => {
+
+            const avisar = (msg: string) => {
+                alert(msg);
+            }
+
+            return (
+                &lt;div className="w-screen h-screen flex justify-center items-center">
+                &lt;CustomButton label='Clique aqui 1' />
+                &lt;CustomButton label='Clique aqui 2' />
+                &lt;CustomButton label='Clique aqui 3' />
+                &lt;/div>
+            );
+        }
+
+        export default Page;
+
+
+
+        -------
+        EXEMPLO 2: evento onClick 
+        -------
+        page
+        -------
+        "use client"
+
+        import { CustomButton } from "@/components/CustomButton";
+        
+        const Page = () => {
+        
+          const handleButton1 = () => alert('clicou bt 1');
+          const handleButton2 = () => alert('clicou bt 2');
+          const handleButton3 = () => alert('clicou bt 3');
+        
+          return (
+            &lt;div className="w-screen h-screen flex justify-center items-center">
+              &lt;CustomButton label='Clique aqui 1' aoClicar={handleButton1} />
+              &lt;CustomButton label='Clique aqui 2' aoClicar={handleButton2} />
+              &lt;CustomButton label='Clique aqui 3' aoClicar={handleButton3} />
+            &lt;/div>
+          );
+        }
+        
+        export default Page;
+
+
+        ---------- 
+        component 
+        ---------- 
+
+        type Props = {
+            label: string;
+            aoClicar: () => void;
+        }
+        
+        export const CustomButton = ({ label, aoClicar }: Props) => {
+            return (
+                &lt;button onClick={aoClicar} className="p-3 text-white bg-blue-700 rounded-md m-3 hover:bg-black">{label}&lt;/button>
+            );
+        }
+
+
+        <hr>
+        <h3>#4: Usando o preventDefault</h3>
+        -------
+        page
+        -------
+        "use client"
+
+        import { FormEvent } from "react";
+
+        const Page = () => {
+
+            const handleFormSubmit = (evento: FormEvent<HTMLFormElement>) => {
+
+                evento.preventDefault();
+
+                alert('Opa, enviando formulário...');
+                // document.querySelector('input[type=text]').value="...enviando... tchau";
+
+            }
+
+            return (
+                &lt;div className="w-screen h-screen flex justify-center items-center flex-col bg-slate-500">
+                    &lt;h2 className="mb-2 font-semibold text-xl">Testando PreventDefault&lt;/h2>
+
+                    &lt;form onSubmit={handleFormSubmit}>
+                        &lt;input type="text"  className="p-3" placeholder="Digite, click 'Enviar' ->" />
+                        &lt;input type="submit" value="Enviar" className="ml-2 border-orange-600 bg-orange-400 rounded-lg font-bold p-3" />
+                    &lt;/form>
+                &lt;/div>
+            );
+        }
+
+        export default Page;
+
+        <hr>
+        <h3>#5: O que é um State?</h3>
+        2 paradigmas
+
+            - trabalhar c eventos, tornar a tela interativa
+            - tornar a aplicação/página fluída possível de 
+            modificar aspectos: STATE
+
+            ciclo de renderização de um componente, significa que,
+            a própria página é um componente, ela roda a função e retorna
+            o elemento que é o JSX (aquela &lt;div> obrigatória que encapsula)
+
+            para que o valor do contador atualize na tela a tela precisa
+            ser renderizada novamente nesse caso. o state pode ser utilizado para
+            armazenar uma contagem. O state identifica que o valor de uma variável
+            foi atualizado então ele pode alterar e renderizar apenas um item na 
+            tela para exibir a atualização
+
+        
+        <hr>
+        <h3>#6: Trabalhando com States</h3>
+        começando a usar states 
+        começar a aprender hooks (ganchos) q são funções do react "use"
+        que implementam funcionalidade específica.
+        geral// mexe compropriedades gerais do componente
+
+        'hook' chamado 'use state'
+        
+
+        -------
+        PAGE
+        -------
+        "use client"
+
+        import { useState } from "react";
+        
+        const Page = () => {
+        
+          const [contador, setContador] = useState&lt;number>(0);
+        
+          const handleClickButton = () => {
+            setContador(contador + 1);
+          }
+        
+          return (
+            &lt;div className="w-screen h-screen flex justify-center items-center flex-col bg-slate-500">
+              &lt;p>{contador}&lt;/p>
+              &lt;button onClick={handleClickButton} className="ml-2 border-orange-600 bg-orange-400 rounded-lg font-bold py-1 px-3">+1&lt;/button>
+            &lt;/div>
+          );
+        }
+        
+        export default Page;
+
+
+        <hr>
+        <h3>#7: Usando states para auxiliar UI</h3>
+        Funcionalidade: exibir/esconder menu, modal
+        
+        "use client"
+
+        import { useState } from "react";
+
+        const Page = () => {
+
+            const [showSecret, setShowSecret] = useState(false);
+
+            const handleClickButton = () => {
+                setShowSecret(!showSecret);
+            }
+
+            return (
+                &lt;div className="w-screen h-screen flex justify-center items-center flex-col bg-slate-500">
+
+                &lt;button onClick={handleClickButton} className="ml-2 border-orange-600 bg-orange-400 rounded-lg font-bold py-1 px-3">{showSecret ? 'Ocultar' : 'Mostrar'}&lt;/button>
+
+                {showSecret &&
+                    &lt;div className="p-2 w-64 bg-slate-900 text-white mt-3 rounded-lg opacity-50 text-center">Área Secreta&lt;/div>
+                }
+                &lt;/div>
+            );
+        }
+
+        export default Page;
+
+
+        <hr>
+        <h3>#8: Usando states em campos</h3>
+        "use client"
+
+        import { useState } from "react";
+
+        const Page = () => {
+
+            const [nameInput, setNameInput] =  useState('');
+
+            const handleBtnClick = () => {
+                alert(nameInput);
+            }
+
+            return (
+                &lt;div className="w-screen h-screen flex justify-center items-center flex-col bg-slate-500">
+
+                &lt;h2 className="text-xl font-bold mb-2">State em inputs&lt;/h2>
+
+                &lt;input type="text"  className="p-3" placeholder="Digite algo" value={nameInput} onChange={evento=>{setNameInput(evento.target.value)}} />
+                &lt;br />
+                &lt;p>Você digitou: {nameInput}&lt;/p>
+                &lt;br />
+                &lt;button onClick={handleBtnClick} className="border-orange-600 bg-orange-400 hover:bg-orange-300 rounded-lg font-bold py-1 px-3">Mostra valor do campo&lt;/button>
+
+                &lt;/div>
+            );
+        }
+
+        export default Page;
+        <hr>
+        <h3>#9: States mudando no tempo</h3>
+        "use client"
+
+        import { useState } from "react";
+
+        const Page = () => {
+
+            const [contador, setContador] = useState(0);
+
+            const handleBtnClick = () => {
+                console.log('contador 0:', contador );
+                setContador(contador + 2); // 0+2
+                console.log('contador 1:', contador );
+                setContador(contador + 2); // 0+2
+                console.log('contador 2:', contador );
+                setContador(contador + 2); // 0+2
+                console.log('contador 3:', contador );
+                // alert(contador);
+                // ele atualiza a STATE no final da execução desse contexto de cógigo.
+            }
+
+            return (
+                &lt;div className="w-screen h-screen flex justify-center items-center flex-col bg-slate-500">
+
+                &lt;h2 className="text-xl font-bold mb-2">#9: States mudando no tempo&lt;/h2>
+                &lt;p>{contador}&lt;/p>
+                &lt;br />
+                &lt;button onClick={handleBtnClick} className="border-orange-600 bg-orange-400 hover:bg-orange-300 rounded-lg font-bold py-1 px-3">+2&lt;/button>
+
+                &lt;/div>
+            );
+        }
+
+        export default Page;
+
+        <hr>
+        <h3>#10: State Updater</h3>
+        esse termo não é oficial para esse tipo de recurso
+        --- 
+
+        "use client"
+
+        import { useState } from "react";
+
+        const Page = () => {
+
+            const [contador, setContador] = useState(0);
+
+            const handleBtnClick = () => {
+                setContador( c => c + 2);
+                setContador( c => c + 2);
+                setContador( c => c + 2);
+                // quando usa função ele pega o valor atualizado da memória
+                // incluindo a fila e fazendo a conta.
+                // não é comum esse tipo de funcionalidade mas pode existir
+                // algum caso específico que se queira fazer uma segunda atualização
+                // no state baseado em alguma outra modificação ou parâmetro
+                // nesse caso USA-SE UMA FUNÇÃO.
+                // Importante saber o fluxo de uma state, saber como ela funciona
+                // para enteder quando ela vai ser modificada de fato
+            }
+
+            return (
+                &lt;div className="w-screen h-screen flex justify-center items-center flex-col bg-slate-500">
+
+                &lt;h2 className="text-xl font-bold mb-2">#9: States mudando no tempo&lt;/h2>
+                &lt;p>{contador}&lt;/p>
+                &lt;br />
+                &lt;button onClick={handleBtnClick} className="border-orange-400 bg-orange-400 border hover:border-black rounded-lg font-bold py-1 px-3">+6&lt;/button>
+
+                &lt;/div>
+            );
+        }
+
+        export default Page;
+        
+        <hr>
+        <h3>#11: Atualizando Objetos em States</h3>
+        aprender um conceito um pouco mais avançado
+        põe o cinto de segurança e Go!
+
+        --- 
+
+        "use client"
+
+        import { Person } from "@/types/Person";
+        import { useState } from "react";
+
+        const Page = () => {
+
+            const [fullName, setFullName] = useState&lt;Person>({ name:'Boniek', lastName: 'Lacerda' });
+
+            const handleClearButton = () => {
+                setFullName({ name: '', lastName: '' });
+            }
+
+            const handleClearButtonNome = () => {
+                const fullNameClone = {...fullName};
+                fullNameClone.name = '';
+                setFullName(fullNameClone);
+            }
+
+            const handleClearButtonSobrenome = () => {
+                const fullNameClone = {...fullName};
+                fullNameClone.lastName = '';
+                setFullName(fullNameClone);
+            }
+
+            return (
+                &lt;div className="w-screen h-screen flex justify-center- pt-3 items-center flex-col bg-slate-500">
+
+                &lt;h2 className="text-xl font-bold mb-2">#11: Atualizando Objetos em States&lt;/h2>
+
+                &lt;input 
+                    type="text"  
+                    className="p-3 mb-2" 
+                    placeholder="Nome"
+                    value={fullName.name}
+                    onChange={ e => setFullName( { ...fullName, name: e.target.value } ) } />
+
+                &lt;input 
+                    type="text"  
+                    className="p-3 mb-2" 
+                    placeholder="Sobrenome"
+                    value={fullName.lastName}
+                    onChange={ e => setFullName({ ...fullName, lastName: e.target.value }) } />
+                    
+                &lt;p className="mb-2">Meu nome completo é:&lt;/p>
+                &lt;p className="font-semibold mb-3">{fullName.name + ' ' + fullName.lastName}&lt;/p>
+                
+                &lt;button onClick={handleClearButtonNome} className="border-orange-600 bg-orange-400 hover:bg-orange-300 rounded-lg font-bold py-1 px-3 mb-3">Limpar &lt;strong>nome&lt;/strong>&lt;/button>
+
+                &lt;button onClick={handleClearButtonSobrenome} className="border-orange-600 bg-orange-400 hover:bg-orange-300 rounded-lg font-bold py-1 px-3 mb-3">Limpar &lt;strong>sobrenome&lt;/strong>&lt;/button>
+
+                &lt;button onClick={handleClearButton} className="border-orange-600 bg-orange-400 hover:bg-orange-300 rounded-lg font-bold py-1 px-3 mb-3">Limpar tudo&lt;/button>
+
+                &lt;/div>
+            );
+        }
+
+        export default Page;
+        
+        <hr>
+        <h3>#12: Arrays em States: Exibir</h3>
+        --- 
+        PAGE 
+        --- 
+        "use client"
+
+        import { TodoItem } from "@/types/TodoItem";
+        import { useState } from "react";
+
+        const Page = () => {
+
+            const [lista, setLista] = useState<TodoItem[]>([
+                { label: 'Fazer dever de casa', checked: false },
+                { label: 'Comprar o bolo', checked: false }
+            ]);
+
+            // quando tiver um array numa state, e houver uma alteração
+            // a documentacao do react sugere criar um novo array e 
+            // inserir no array da state.
+
+            // lista.push(...) nao pode fazer isso pq o push nao cria um novo array
+            // pop() e shift(), essas funções vão mutar o array na memória
+            // filter - ok, cria um novo array através do filtro executado
+            // slice - ok, cria um novo array
+            // sort - not, reordena os itens em um array, altera o que já existe.
+
+            return (
+                &lt;div className="w-screen h-screen flex justify-center- pt-3 items-center flex-col bg-slate-500">
+
+                &lt;h2 className="text-xl font-bold mb-2">#12: Arrays em States: Exibir&lt;/h2>
+                &lt;h3 className="text-md font-semibold mb-2">lista de tarefas&lt;/h3>
+
+                &lt;div className="flex w-full max-w-lg my-3 p-4 rounded-md bg-gray-700 border-2 border-gray-500">
+                    
+                    &lt;input 
+                    type="text"  
+                    placeholder="O que deseja fazer?"
+                    className="flex-1 border border-black p-3 text-2xl text-black rounded-md mr-3" 
+                    />
+
+                    &lt;button>Adicionar&lt;/button>
+
+                &lt;/div>
+
+                &lt;ul className="w-full max-w-lg list-disc pl-5">
+                    {lista.map(item => (
+                    &lt;li>{item.label} - &lt;button className="hover:underline">[ deletar ]&lt;/button>&lt;/li>
+                    ))}
+                &lt;/ul>
+
+                &lt;/div>
+            );
+        }
+
+        export default Page;
+
+        --- 
+        TYPE: @/types/TodoItem.ts
+        --- 
+        export type TodoItem = {
+            label: string;
+            checked: boolean;
+        }
+
+        <hr>
+        <h3>#13: Arrays em States: Adicionar</h3>
+        
+        <hr>
+        <h3>#14: Arrays em States: Excluir</h3>
+        
+        <hr>
+        <h3>#15: Arrays em States: Alterar</h3>
+        --- 
+        PAGE 
+        --- 
+        "use client"
+
+        import { TodoItem } from "@/types/TodoItem";
+        import { useState } from "react";
+
+        const Page = () => {
+
+            const [itemInput, setItemInput] = useState('');
+
+            const [lista, setLista] = useState&lt;TodoItem[]>([
+                { label: 'Fazer dever de casa', checked: true },
+                { label: 'Comprar o bolo', checked: false }
+            ]);
+
+            const handleAddButton = () => {
+                if(itemInput.trim() === '') return;
+
+                setLista([ ...lista, { label: itemInput, checked: false } ]);
+                setItemInput('');
+            }
+
+            const deleteItem = (index: number) => {
+                // alert("deletando item: " + index);
+                const newLista = lista.filter((item, key) => key !== index);
+                setLista(newLista);
+            }
+
+            const toggleItem = (index: number) => {
+                // 2 formas de criar um novo array:
+                // 2.1 clonar o array e alterar esse array
+                // 2.2 usar o map, desde que no retorno do map crie-se um novo array
+
+                let novaLista = [...lista];
+                // novaLista.map();
+
+                // for(let i in novaLista){ // esse é o pensamento comum
+                //   if(index === parseInt(i)){
+                //     novaLista[i].checked = !novaLista[i].checked;
+                //   }
+                // }
+
+                novaLista[index].checked = !novaLista[index].checked;
+                // o index já é a posição daquele item no array
+                // pode evitar o FOR
+
+                setLista(novaLista);
+
+            }
+
+            return (
+                &lt;div className="w-screen h-screen flex justify-center- pt-3 items-center flex-col bg-slate-500">
+
+                &lt;h2 className="text-xl font-bold mb-2">#12: Arrays em States: Exibir&lt;/h2>
+                &lt;h3 className="text-md font-semibold mb-2">lista de tarefas&lt;/h3>
+
+                &lt;div className="flex w-full max-w-lg my-3 p-4 rounded-md bg-gray-700 border-2 border-gray-500">
+                    
+                    &lt;input 
+                    type="text"  
+                    placeholder="O que deseja fazer?"
+                    className="flex-1 border border-black p-3 text-2xl text-black rounded-md mr-3" 
+                    value={itemInput}
+                    onChange={e => setItemInput(e.target.value)}
+                    />
+
+                    &lt;button onClick={handleAddButton}>Adicionar&lt;/button>
+
+                &lt;/div>
+
+                &lt;p className="text-white text-md mb-2">itens na lista: {lista.length} &lt;/p>
+
+                &lt;ul className="w-full max-w-lg list-disc pl-5">
+                    {lista.map((item, index) => (
+                    &lt;li key={index}>
+                        &lt;input onClick={() => toggleItem(index)} type="checkbox" defaultChecked={item.checked} className="w-6 h-6 m-1 align-middle" />
+                        {item.label} - &lt;button onClick={() => {deleteItem(index)}} className="hover:underline">[ deletar ]&lt;/button>
+                    &lt;/li>
+                    ))}
+                &lt;/ul>
+
+                &lt;/div>
+            );
+        }
+
+        export default Page;
+        
+        <hr>
+        <h3>#16: Arrays em States: Usando ID</h3>
+        --- 
+        PAGE 
+        -------
+        "use client"
+
+        import { TodoItem } from "@/types/TodoItem";
+        import { useState } from "react";
+        
+        const Page = () => {
+        
+          const [itemInput, setItemInput] = useState('');
+        
+          const [lista, setLista] = useState&lt;TodoItem[]>([
+            { id: 1, label: 'Fazer dever de casa', checked: true },
+            { id: 2, label: 'Comprar o bolo', checked: false }
+          ]);
+        
+          const handleAddButton = () => {
+            if(itemInput.trim() === '') return;
+        
+            setLista([ ...lista, { id: lista.length + 1, label: itemInput, checked: false } ]);
+            setItemInput('');
+          }
+        
+          const deleteItem = (id: number) => {
+            const newLista = lista.filter(item => item.id !== id);
+            setLista(newLista);
+          }
+        
+          const toggleItem = (id: number) => {
+            let novaLista = [...lista];
+        
+            for(let i in novaLista){
+              if(novaLista[i].id === id){
+                novaLista[i].checked = !novaLista[i].checked;
+              }
+            }
+        
+            setLista(novaLista);
+          }
+        
+          return (
+            &lt;div className="w-screen h-screen flex justify-center- pt-3 items-center flex-col bg-slate-500">
+        
+              &lt;h2 className="text-xl font-bold mb-2">#12: Arrays em States: Exibir&lt;/h2>
+              &lt;h3 className="text-md font-semibold mb-2">lista de tarefas&lt;/h3>
+        
+              &lt;div className="flex w-full max-w-lg my-3 p-4 rounded-md bg-gray-700 border-2 border-gray-500">
+                
+                &lt;input 
+                  type="text"  
+                  placeholder="O que deseja fazer?"
+                  className="flex-1 border border-black p-3 text-2xl text-black rounded-md mr-3" 
+                  value={itemInput}
+                  onChange={e => setItemInput(e.target.value)}
+                />
+        
+                &lt;button onClick={handleAddButton}>Adicionar&lt;/button>
+        
+              &lt;/div>
+        
+              &lt;p className="text-white text-md mb-2">itens na lista: {lista.length} &lt;/p>
+        
+              &lt;ul className="w-full max-w-lg list-disc pl-5">
+                {lista.map((item) => (
+                  &lt;li key={item.id}>
+                    &lt;input onClick={() => toggleItem(item.id)} type="checkbox" defaultChecked={item.checked} className="w-6 h-6 m-1 align-middle" />
+                    {item.label} - &lt;button onClick={() => {deleteItem(item.id)}} className="hover:underline">[ deletar ]&lt;/button>
+                  &lt;/li>
+                ))}
+              &lt;/ul>
+        
+            &lt;/div>
+          );
+        }
+        
+        export default Page;
+    </pre>
+    
+</body>
+</html>
