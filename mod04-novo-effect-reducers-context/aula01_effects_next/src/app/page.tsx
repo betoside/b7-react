@@ -1,23 +1,50 @@
 "use client"
 
+import { ItemTarefa } from "@/types/ItemTarefa";
 import { useState } from "react";
-import { Square } from "@/components/Square";
+
 
 const Page = () => {
 
-  const [show, setShow] = useState(false);
+  const [list, setList] = useState<ItemTarefa[]>([]);
+
+  const addNewitem = (text: string) => {
+    setList([ ...list, { 
+      id: list.length, 
+      text, 
+      done:false
+    }]);
+
+  };
+
+  const editItemText = (id: number, newText: string) => {
+    setList(
+      list.map(t => {
+        if (t.id === id) t.text = newText;
+        return t;
+      })
+    );
+  };
+
+  const toggleItem = (id: number) => {
+    setList(
+      list.map(t => {
+        if (t.id === id) t.done = !t.done;
+        return t;
+      })
+    );
+  };
+
+  const removeItem = (id: number) => {
+    setList(
+      list.filter(t => t.id !== id)
+    );
+  }
+
 
   return (
     <div className=''>
 
-      <button 
-        className="bg-blue-400 rounded-md p-3 text-black mb-2" 
-        onClick={ () => setShow(!show) }
-      >show / hide</button>
-
-      <hr className="mb-2" />
-
-      {show && <Square />}
 
     </div>
   )

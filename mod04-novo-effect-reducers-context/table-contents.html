@@ -358,6 +358,78 @@ export const Square = () => {
 <hr>
 <h3>#6: O que são Reducers?</h3>
 
+É um recurso do ReactJS que vai substituir seu useState 
+de forma que consiga criar um state mas que traga várias opções 
+de adicionar/remover/alterar propriedades e funcionalidades
+mesmo sendo específicas para uma tipo de atividade/objetivo. 
+
+--- 
+aula01_effects_next/src/app/page.tsx
+--- 
+"use client"
+
+import { ItemTarefa } from "@/types/ItemTarefa";
+import { useState } from "react";
+
+
+const Page = () => {
+
+  const [list, setList] = useState&lt;ItemTarefa[]>([]);
+
+  const addNewitem = (text: string) => {
+    setList([ ...list, { 
+      id: list.length, 
+      text, 
+      done:false
+    }]);
+
+  };
+
+  const editItemText = (id: number, newText: string) => {
+    setList(
+      list.map(t => {
+        if (t.id === id) t.text = newText;
+        return t;
+      })
+    );
+  };
+
+  const toggleItem = (id: number) => {
+    setList(
+      list.map(t => {
+        if (t.id === id) t.done = !t.done;
+        return t;
+      })
+    );
+  };
+
+  const removeItem = (id: number) => {
+    setList(
+      list.filter(t => t.id !== id)
+    );
+  }
+
+
+  return (
+    &lt;div className=''>
+
+
+    &lt;/div>
+  )
+}
+
+export default Page;
+
+
+--- 
+aula01_effects_next/src/types/ItemTarefa.ts
+--- 
+
+export type ItemTarefa = {
+    id: number;
+    text: string;
+    done: boolean;
+}
 
 <hr>
 <h3>#7: Criando um Reducer 1</h3>
