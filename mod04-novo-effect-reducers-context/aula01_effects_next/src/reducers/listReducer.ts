@@ -40,7 +40,35 @@ export const listReducer = (list: ItemTarefa[], action: ListActions) => {
     // action.type // qual ação a ser executada
     // action.payload // qual a carga dela, o dado que mando junto da ação
 
+    switch (action.type) {
+        case 'add':
+            return [ ...list, { 
+                id: list.length, 
+                text: action.payload.text, 
+                done:false
+              }];
 
-    return list;
+        case 'editText':
+            return list.map(t => {
+                if (t.id === action.payload.id) {
+                    t.text = action.payload.newText;
+                };
+                return t;
+              });
+
+        case 'toggleDone':
+            return list.map(t => {
+                if (t.id === action.payload.id) {
+                    t.done = !t.done;
+                };
+                return t;
+              })
+
+        case 'remove':
+            return list.filter(t => t.id !== action.payload.id)
+
+        default:
+            return list;
+    }
 
 }

@@ -1,49 +1,54 @@
 "use client"
 
+import { listReducer } from "@/reducers/listReducer";
 import { ItemTarefa } from "@/types/ItemTarefa";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 
 
 const Page = () => {
 
-  const [list, setList] = useState<ItemTarefa[]>([]);
+  const [list, dispatch] = useReducer(listReducer, []);
 
-  const addNewitem = (text: string) => {
-    setList([ ...list, { 
-      id: list.length, 
-      text, 
-      done:false
-    }]);
+  const handleAddClick = () => {
 
-  };
+    dispatch({
+      type: 'add',
+      payload: {
+        text: 'Novo item'
+      }
+    });
 
-  const editItemText = (id: number, newText: string) => {
-    setList(
-      list.map(t => {
-        if (t.id === id) t.text = newText;
-        return t;
-      })
-    );
-  };
-
-  const toggleItem = (id: number) => {
-    setList(
-      list.map(t => {
-        if (t.id === id) t.done = !t.done;
-        return t;
-      })
-    );
-  };
-
-  const removeItem = (id: number) => {
-    setList(
-      list.filter(t => t.id !== id)
-    );
   }
+
+  // dispatch({
+  //   type: "toggleDone",
+  //   payload: {
+  //     id: 2
+  //   }
+  // });
+
+  // dispatch({
+  //   type: 'editText',
+  //   payload: {
+  //     id: 2,
+  //     newText: 'Bla Bla Bla'
+  //   }
+  // });
+
+  // dispatch({
+  //   type: "remove",
+  //   payload: {
+  //     id: 2
+  //   }
+  // });
 
 
   return (
     <div className=''>
+
+      <button
+        className="bg-blue-400 rounded-md p-3 text-black mb-2" 
+        onClick={handleAddClick}>Adicionar</button>
 
 
     </div>
