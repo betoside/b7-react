@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 4: (NOVO) Effect, Reducers e Context novo</title>
+</head>
+<body>
+
+    <h1>Módulo 4: (NOVO) Effect, Reducers e Context novo</h1>
+    <p>18 aulas</p>
+
+<pre>
+
+<strong>#Iniciando um projeto com Next</strong>
+
+    1º Atualizar a versão
+        
+        sudo npm install --location=global creat-next-app  
+        ou
+        sudo npm install -g create-next-app
+        $ password: (ele vai pedir a senha)
+    
+
+    Criar um projeto com NEXT
+
+        npx create-next-app
+
+            Initializing project with template: app-tw
+
+            Installing dependencies:
+            - react
+            - react-dom
+            - next
+            - typescript
+            - @types/react
+            - @types/node
+            - @types/react-dom
+            - tailwindcss
+            - postcss
+            - autoprefixer
+
+        code &lt;NOME-PASTA> [vai abrir um VSCode com a pasta do projeto]
+
+        cd &lt;NOME-PASTA>
+        
+        $ npm run dev
+
+    ou
+
+    npx create-react-app &lt;NOME-PROJETO> --template typescript
+    
+    ou
+        
+    npx create-react-app . --template typescript
+        
+    npm start
+    
+
+<hr>
+<h3>#1: O que são Effects?</h3>
+
+um código a ser executado qdo como consequência de alguma outra coisa acontecendo
+
+exemplo:
+carregamento de algum componente.
+qdo uma state mudar.
+
+
+Criar um projeto para estudo:
+
+npx create-react-app aula01_effects --template typescript
+
+
+<hr>
+<h3>#2: Definindo um Effect</h3>
+
+Vamos usar o effect através de um hook
+
+useEffect é o nome do hook
+o nome do recurso é Effect
+
+ATENÇÃO com o "use client"
+
+
+
+A cada renderização o EFFECT vai ser executado:
+
+useEffect(() => {
+    console.log('RODOU O EFFECT...');
+});
+
+== x ==
+
+O componente será executado apenas ao iniciar
+
+useEffect(() => {
+    console.log('RODOU O EFFECT...');
+}, <strong>[]</strong>);
+
+o array é onde estará a function a ser executada a cada renderização.
+se vazio, então sem função.
+mas ele executa ao carregar, ou seja, 1x.
+
+== x ==
+Agora ele está monitorando a variável NAME:
+
+useEffect(() => {
+    console.log('RODOU O EFFECT...');
+  }, [name]);
+
+<hr>
+<h3>#3: Usando o Effect da forma correta</h3>
+
+
+<hr>
+<h3>#4: Exemplo real do Effect</h3>
+
+
+<hr>
+<h3>#5: Usando o CleanUp</h3>
+
+
+<hr>
+<h3>#6: O que são Reducers?</h3>
+
+
+<hr>
+<h3>#7: Criando um Reducer 1</h3>
+
+
+<hr>
+<h3>#8: Criando um Reducer 2</h3>
+
+
+<hr>
+<h3>#9: Usando o Reducer 1</h3>
+
+
+<hr>
+<h3>#10: Usando o Reducer 2</h3>
+
+
+<hr>
+<h3>#11: Usando o Reducer 3</h3>
+
+
+<hr>
+<h3>#12: O que é Context?</h3>
+
+
+<hr>
+<h3>#13: Criando um Context</h3>
+
+
+<hr>
+<h3>#14: Alterando um Context</h3>
+
+
+<hr>
+<h3>#15: Organizando um Context</h3>
+
+
+<hr>
+<h3>#16: Exercício: Contexto para Usuário Logado</h3>
+
+
+<hr>
+<h3>#17: Exercicio: Contexto para Posts 1</h3>
+
+
+<hr>
+<h3>#18: Exercício: Contexto para Posts 2</h3>
+
+
+</pre>
+</body>
+</html>
