@@ -1,31 +1,23 @@
 "use client"
 
 import { useState } from "react";
-import { VideoPlayer } from "@/components/VideoPlayer";
+import { Square } from "@/components/Square";
 
 const Page = () => {
 
-  const [playing, setPlaying] = useState(false);
+  const [show, setShow] = useState(false);
 
   return (
     <div className=''>
 
-      <div className="border p-3 mb-4">
-        <p className="text-2xl text-blue-400 mb-3"> {playing ? 'Rodando' : 'Pausado'} </p>
-        <button className='bg-blue-400 rounded-md p-3 text-black'
-          onClick={() => setPlaying(!playing)}
-        >Play/Pause</button>
-      </div>
+      <button 
+        className="bg-blue-400 rounded-md p-3 text-black mb-2" 
+        onClick={ () => setShow(!show) }
+      >show / hide</button>
 
+      <hr className="mb-2" />
 
-      <VideoPlayer
-        src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" 
-        isPlaying={playing}
-      />
-
-
-
-      
+      {show && <Square />}
 
     </div>
   )

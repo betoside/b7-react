@@ -276,6 +276,84 @@ export const VideoPlayer = ({src, isPlaying}: Props) => {
 <hr>
 <h3>#5: Usando o CleanUp</h3>
 
+é o 3º item da lista, definicao do que será feito 
+qdo o componente for removido da tela ou da memória
+
+conexao com um socket, uma conexao continua,
+o componente show/hide, fez a conexao.
+
+click no botao e hide.
+conexao encerrada. aqui entra o CLEANUP
+
+== x ==
+
+é pouco usado.
+
+por exemplo, se vc retira uma galeria de foto da tela não precisa avisar nada nem ninguém.
+
+Geral//e ele é executado qto tem estabelecimento de alguma
+coisa contínua que precisa ser parada.
+
+Outro exemplo. Vamos supor que um elemento addEventListener('scroll')
+foi ativado. É necessário retira isso, removeEventListener('scroll')
+o clenaUn faz isso.
+
+funciona para EventListener ou para alguma ocasião de conexão.
+
+
+--- 
+aula01_effects_next/src/app/page.tsx
+--- 
+"use client"
+
+import { useState } from "react";
+import { Square } from "@/components/Square";
+
+const Page = () => {
+
+  const [show, setShow] = useState(false);
+
+  return (
+    &lt;div className=''>
+
+      &lt;button 
+        className="bg-blue-400 rounded-md p-3 text-black mb-2" 
+        onClick={ () => setShow(!show) }
+      >show / hide&lt;/button>
+
+      &lt;hr className="mb-2" />
+
+      {show && &lt;Square />}
+
+    &lt;/div>
+  )
+}
+
+export default Page;
+
+
+--- 
+aula01_effects_next/src/components/Square.tsx
+--- 
+import { useEffect } from "react";
+
+
+export const Square = () => {
+
+    useEffect( ()=>{
+        console.log('RODOU O EFFECT: &lt;Conectado>');
+        window.addEventListener('scroll', ()=>{});
+
+        return () => { // essa função vai executar quando o componente 'sumir do mapa'
+            console.log('RODOU O CleanUp: &lt;Desconectado>');
+            window.removeEventListener('scroll', ()=>{});
+        }
+    } );
+
+    return(
+        &lt;div className="w-40 h-40 bg-red-400">&lt;/div>
+    );
+}
 
 <hr>
 <h3>#6: O que são Reducers?</h3>
