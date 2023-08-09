@@ -1,0 +1,53 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# pastas locais pesadas c os projetos de estudo
+mod01-intro-instalacao/08-iniciando-proj-next/
+mod01-intro-instalacao/09-iniciando-proj-vite/
+
+mod03-estados-eventos/17_exercicio_galeria_fotos/galeria-fotos
+mod03-estados-eventos/20-exercicio-quiz/
+mod03-estados-eventos/react-modulo3-estados-eventos/
+
+mod04-listas-estilizacao/aula10-tailwindCSS-vite/
+mod04-listas-estilizacao/mod04-listas-estilizacao/
+
+mod05-calculadora-imc/react_calc_imc/
+
+mod06-cicloVida-requisicao-hooks/mod0616_reducer/
+mod06-cicloVida-requisicao-hooks/mod06_ciclo_requisicao_hooks/
+mod06-cicloVida-requisicao-hooks/mod06_ciclo_requisicao_hooks_ts/
+
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
