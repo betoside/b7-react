@@ -112,9 +112,98 @@ useEffect(() => {
 <hr>
 <h3>#3: Usando o Effect da forma correta</h3>
 
+MODO ANTIGO
+
+--- 
+aula01_effects_next/src/app/page.tsx
+--- 
+"use client"
+
+import { useEffect, useState } from 'react';
+
+const Page = () => {
+
+  const [firstname, setFirstname] = useState&lt;string>('Boniek');
+  const [lastname, setLastname] = useState&lt;string>('Lacerd');
+  const [fullname, setFullname] = useState&lt;string>();
+
+  useEffect(() => {
+    setFullname(firstname + ' ' + lastname);
+  }, [firstname, lastname]);
+
+  return (
+    &lt;div className=''>
+
+      &lt;p>Meu nome é {fullname}&lt;/p>
+      &lt;hr />
+
+      &lt;button className='p-2 border rounded-md m-3 border-blue-700' 
+        onClick={()=>{setFirstname('Pedro')}}
+      >Nome 'Pedro'&lt;/button>
+      &lt;button className='p-2 border rounded-md m-3 border-blue-700' 
+        onClick={()=>{setLastname('Alvares')}}
+      >Sobrenome 'Alvares'&lt;/button>
+
+    &lt;/div>
+  )
+}
+
+export default Page;
+
+
+== x ==
+AGORA A FORMA OTIMIZADA.
+Não precisa usar useEffect
+
+--- 
+aula01_effects_next/src/app/page.tsx 
+--- 
+"use client"
+
+import { useEffect, useState } from 'react';
+
+const Page = () => {
+
+  const [firstname, setFirstname] = useState&lt;string>('Boniek');
+  const [lastname, setLastname] = useState&lt;string>('Lacerd');
+  
+  const fullname = firstname + ' ' + lastname;
+
+  return (
+    &lt;div className=''>
+
+      &lt;p>Meu nome é {fullname}&lt;/p>
+      &lt;hr />
+
+      &lt;button className='p-2 border rounded-md m-3 border-blue-700' 
+        onClick={()=>{setFirstname('Pedro')}}
+      >Nome 'Pedro'&lt;/button>
+      &lt;button className='p-2 border rounded-md m-3 border-blue-700' 
+        onClick={()=>{setLastname('Alvares')}}
+      >Sobrenome 'Alvares'&lt;/button>
+
+    &lt;/div>
+  )
+}
+
+export default Page;
+
+
+== x ==
+
+Então quando usa-se o useEffect?
+Qdo precisa usar alguma integração ou serviço externo aos itens padrão do React.
+
+Qdo precisa usar alguma API, carregar uma câmera, 
+dar um play em um player externo de vídeo que está colocando na tela.
+Clicou no botão 'PAUSE' no player... executa o comando dentro do useEffect
+
+
 
 <hr>
 <h3>#4: Exemplo real do Effect</h3>
+
+Video utilizado: https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4
 
 
 <hr>
