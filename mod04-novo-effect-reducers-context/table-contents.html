@@ -206,6 +206,73 @@ Clicou no botão 'PAUSE' no player... executa o comando dentro do useEffect
 Video utilizado: https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4
 
 
+---
+aula01_effects_next/src/app/page.tsx
+---
+"use client"
+
+import { useState } from "react";
+import { VideoPlayer } from "@/components/VideoPlayer";
+
+const Page = () => {
+
+  const [playing, setPlaying] = useState(false);
+
+  return (
+    &lt;div className=''>
+
+      &lt;div className="border p-3 mb-4">
+        &lt;p className="text-2xl text-blue-400 mb-3"> {playing ? 'Rodando' : 'Pausado'} &lt;/p>
+        &lt;button className='bg-blue-400 rounded-md p-3 text-black'
+          onClick={() => setPlaying(!playing)}
+        >Play/Pause&lt;/button>
+      &lt;/div>
+
+
+      &lt;VideoPlayer
+        src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" 
+        isPlaying={playing}
+      />
+
+
+
+      
+
+    &lt;/div>
+  )
+}
+
+export default Page;
+
+---
+aula01_effects_next/src/components/VideoPlayer.tsx
+---
+import { useEffect, useRef } from "react";
+
+type Props = {
+    src: string;
+    isPlaying: boolean;
+}
+
+export const VideoPlayer = ({src, isPlaying}: Props) => {
+
+    const videoTag = useRef&lt;HTMLVideoElement>(null);
+    // videoTag.current?.play();
+    // videoTag.current?.pause();
+
+    useEffect(()=>{
+        if (isPlaying) {
+            videoTag.current?.play();
+        } else {
+            videoTag.current?.pause();
+        }
+    }, [isPlaying]); // tem apenas o isPlaying, poderia deixar sem o ', []'
+
+    return (
+        &lt;video ref={videoTag} src={src} loop playsInline />
+    );
+}
+
 <hr>
 <h3>#5: Usando o CleanUp</h3>
 
