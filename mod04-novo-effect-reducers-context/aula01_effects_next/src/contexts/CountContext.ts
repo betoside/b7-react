@@ -2,5 +2,12 @@
 
 import { createContext } from "react";
 
-export const CountInitialData = 150;
-export const CountContext = createContext(CountInitialData); // parte 1 criada. o contexto.
+type CountContextType = {
+    onlineCount: number,
+    setOnlineCount: (n: number) => void;
+}
+
+export const CountContext = createContext<CountContextType | null>(null);
+
+// trocar de armazenar um numero 
+// por um objeto com dois valores diferentes

@@ -3,9 +3,18 @@ import { useContext } from "react";
 
 export const OnlineUsers = () => {
 
-    const count = useContext(CountContext);
+    const countCtx = useContext(CountContext);
+
+    const handleBanAll = () => {
+        countCtx?.setOnlineCount(0);
+    }
 
     return(
-        <p>Online: {count}</p>
+        <>
+            <p>Online: {countCtx?.onlineCount}</p>
+            <button 
+                className="border border-orange-900 rounded-lg px-2" 
+                onClick={handleBanAll}>Banir todo mundo</button>
+        </>
     );
 }
