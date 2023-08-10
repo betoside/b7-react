@@ -4,7 +4,6 @@ import { listReducer } from "@/reducers/listReducer";
 import { ItemTarefa } from "@/types/ItemTarefa";
 import { useReducer, useState } from "react";
 
-
 const Page = () => {
 
   const [list, dispatch] = useReducer(listReducer, []);
@@ -29,6 +28,27 @@ const Page = () => {
     });
   }
 
+  const handleEdit = (id: number) => {
+    const item = list.find(it => it.id === id);
+    if(!item) return false;
+
+    const newText = window.prompt('Editar Tarefa', item.text);
+    if (!newText || newText?.trim() === '') return false;
+
+    dispatch({
+      type: 'editText',
+      payload: { id, newText }
+    });
+  }
+
+  const handleRemove = (id: number) => {
+    if (!window.confirm('Tem certeza que deseja excluir?')) return false;
+    dispatch({
+      type: "remove",
+      payload: { id }
+    });
+  }
+
   return (
     <div className='container mx-auto text-white'>
 
@@ -46,9 +66,9 @@ const Page = () => {
         <button
           className="bg-blue-400 rounded-md p-3 text-black mb-2" 
           onClick={handleAddButton}>Adicionar</button>
-
-        
+          
       </div>
+
       <ul className="p-4 m-4">
         {list.map((item) => (
           <li key={item.id} className="flex justify-between border-b border-b-gray-900 pb-2 mb-2">
@@ -58,8 +78,8 @@ const Page = () => {
               onClick={() => handleDoneCheckbox(item.id)}
             />
             <p className="flex-1 txt-lg">{item.text}</p>
-            <button  className="mx-2">Editar</button>
-            <button  className="mx-2 text-red-700">Excluir</button>
+            <button onClick={() => handleEdit(item.id)} className="mx-2">Editar</button>
+            <button onClick={() => handleRemove(item.id)} className="mx-2 text-red-700">Excluir</button>
           </li>
         ))}
       </ul>
