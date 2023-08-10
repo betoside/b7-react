@@ -1164,6 +1164,140 @@ export const OnlineUsers = () => {
 
 <hr>
 <h3>#15: Organizando um Context</h3>
+criados o contexto, types, provider em outro arquivo, uma state p alterar o valor
+junto com o provider...
+
+isso pode facilmente sair do controle
+
+O processo da etapa anterior pode ter um emaranhado de códigos 
+em cantos diferentes sobre o mesmo assunto pra permitir que 
+só com todo mundo junto é que vai funcionar o negócio.
+
+então isso facilmente pode ficar desorganizado e complicado 
+para dar manutenção
+
+PRA ISSO, O QUE A GENTE FAZ?
+em 1 arquivo só, o do CONTEXTO, faz todas as etapas
+para o contexto funcionar bonito.
+
+inclui:
+o proprio Contexto
+o provider, que estava em outro arquivo
+
+o trabalho agora é pegar o conteudo e organizar o código
+para funcionar dentro de 1 arquivo apenas.
+
+agora vai ter código JSX, tem que trocar a extensão do arquivo para .tsx.
+
+
+OBS: 
+necessário reiniciar o server para ele não querer enxergar 
+variáveis que não existem mais
+
+    $ npm run dev
+
+
+--- 
+aula01_effects_next/src/app/page.tsx
+--- 
+"use client"
+
+import { Header } from "@/components/Header";
+import { CountProvider } from "@/contexts/CountContext";
+
+const Page = () => {
+  
+  return (
+    &lt;div className='container mx-auto text-white p-9'>
+
+      &lt;CountProvider>
+        &lt;Header />
+      &lt;/CountProvider>
+      
+    &lt;/div>
+  )
+}
+
+export default Page;
+
+
+--- 
+aula01_effects_next/src/contexts/CountContext.tsx
+--- 
+import { ReactNode, createContext, useState } from "react";
+
+type CountContextType = {
+    onlineCount: number,
+    setOnlineCount: (n: number) => void;
+}
+
+export const CountContext = createContext&lt;CountContextType | null>(null);
+
+type Props = { children: ReactNode; }
+
+export const CountProvider = ( {children}: Props ) => {
+
+    const [onlineCount, setOnlineCount] = useState(45);
+
+    return(
+        &lt;CountContext.Provider value={{onlineCount, setOnlineCount}}>
+            {children}
+        &lt;/CountContext.Provider>
+    );
+}
+
+// agora dentro deste arquivo tenho o contexto e o provider 
+// e junto do provider tenho a state para fazer as modificações
+// tudo que é necessário para começar a brincadeira
+// agora tem que substituir tudo na page.tsx
+
+
+--- 
+aula01_effects_next/src/components/Header.tsx
+--- 
+
+import { useContext } from "react";
+import { OnlineUsers } from "./OnlineUsers";
+import { CountContext } from "@/contexts/CountContext";
+
+export const Header = () => {
+
+    const countCtx = useContext(CountContext);
+
+    return(
+
+        &lt;header>
+            &lt;h1 className="text-3xl">Título da página ({countCtx?.onlineCount}) &lt;/h1>
+            &lt;OnlineUsers />
+        &lt;/header>
+    );
+}
+
+
+--- 
+aula01_effects_next/src/components/OnlineUsers.tsx
+--- 
+import { CountContext } from "@/contexts/CountContext";
+import { useContext } from "react";
+
+export const OnlineUsers = () => {
+
+    const countCtx = useContext(CountContext);
+
+    const handleBanAll = () => {
+        countCtx?.setOnlineCount(0);
+    }
+
+    return(
+        &lt;>
+            &lt;p>Online: {countCtx?.onlineCount}&lt;/p>
+            &lt;button 
+                className="border border-orange-900 rounded-lg px-2" 
+                onClick={handleBanAll}>Banir todo mundo&lt;/button>
+        &lt;/>
+    );
+}
+
 
 
 <hr>
