@@ -633,6 +633,66 @@ export default Page;
 <hr>
 <h3>#9: Usando o Reducer 1</h3>
 
+--- 
+aula01_effects_next/src/app/page.tsx 
+---
+"use client"
+
+import { listReducer } from "@/reducers/listReducer";
+import { ItemTarefa } from "@/types/ItemTarefa";
+import { useReducer, useState } from "react";
+
+
+const Page = () => {
+
+  const [list, dispatch] = useReducer(listReducer, []);
+  const [addField, setAddField] = useState('');
+
+  const handleAddButton = () => {
+    if(addField.trim() === '') return false;
+
+    dispatch({
+      type: 'add',
+      payload: {
+        text: addField.trim()
+      }
+    });
+
+    setAddField('');
+  }
+
+  return (
+    &lt;div className='container mx-auto text-white'>
+
+      &lt;h1 className="text-center text-4xl my-4">Lista de tarefas&lt;/h1>
+      &lt;div className="border border-gray-400 p-4 m-4 bg-gray-900">
+
+        &lt;input 
+          type="text" 
+          name="nota" 
+          value={addField}
+          onChange={e => setAddField(e.target.value)}
+          placeholder="Escreva uma tarefa"
+          className="p-3 mr-3 w-2/3 outline-none bg-transparent border rounded-lg"
+         />
+        &lt;button
+          className="bg-blue-400 rounded-md p-3 text-black mb-2" 
+          onClick={handleAddButton}>Adicionar&lt;/button>
+
+        
+      &lt;/div>
+      &lt;ul className="p-4 m-4">
+        {list.map((item) => (
+          &lt;li key={item.id}>{item.id} - {item.text}&lt;/li>
+        ))}
+      &lt;/ul>
+
+    &lt;/div>
+  )
+}
+
+export default Page;
+
 
 <hr>
 <h3>#10: Usando o Reducer 2</h3>
@@ -668,6 +728,60 @@ export default Page;
 
 <hr>
 <h3>#18: Exercício: Contexto para Posts 2</h3>
+
+
+<hr>
+<h3>#19: Context com Reducers 1</h3>
+
+
+<hr>
+<h3>#20: Context com Reducers 2</h3>
+
+
+<hr>
+<h3>#21: Dica sobre Context e Reducer</h3>
+
+
+<hr>
+<h3>#22: Criando hook para Context</h3>
+
+
+<hr>
+<h3>#23: Persistindo Context em LocalStorage</h3>
+
+
+<hr>
+<h3>#24: Exercício: Dark theme 1</h3>
+
+
+<hr>
+<h3>#25: Exercício: Dark theme 2</h3>
+
+
+<hr>
+<h3>#26: Dark theme via Context e Tailwind</h3>
+
+
+<hr>
+<h3>#27: Exercício: Chat simples com histórico 1</h3>
+
+
+<hr>
+<h3>#28: Exercício: Chat simples com histórico 2</h3>
+
+
+<hr>
+<h3>#29: Exercício: Chat simples com histórico 3</h3>
+
+
+<hr>
+<h3>#30: Exercício: Chat simples com histórico 4</h3>
+
+
+<hr>
+<h3>#31: Exercício: Chat simples com histórico 5</h3>
+
+
 
 
 </pre>
