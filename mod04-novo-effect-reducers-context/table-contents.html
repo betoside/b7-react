@@ -874,9 +874,191 @@ export default Page;
 <hr>
 <h3>#12: O que é Context?</h3>
 
+FORMA 1 DE CONTEXTO.
+Está correto mas a cadeia de passagem de informação
+entre eles é enorme.
+
+Existe outra forma melhor de fazer.
+
+--- 
+aula01_effects_next/src/app/page.tsx 
+---
+"use client"
+
+const Page = () => {
+
+  const Subtitle = ({label}: {label: string}) => {
+    return(
+      &lt;p>{label}&lt;/p>
+    );
+  }
+
+  const Title = ({label}: {label: string}) => {
+    return(
+      &lt;h1 className="text-4xl">{label}&lt;/h1>
+    );
+  }
+
+  const Header = ({title, subtitle}: {title: string; subtitle: string}) => {
+    return(
+      &lt;header>
+        &lt;Title label={title} />
+        &lt;Subtitle label={subtitle} />
+      &lt;/header>
+    );
+  }
+
+  const pageInfo = {
+    title: 'Titulo Maroto',
+    subtitle: 'Subtitulo muito legal e bem feito'
+  }
+  
+  return (
+    &lt;div className='container mx-auto text-white p-9'>
+      &lt;Header title={pageInfo.title} subtitle={pageInfo.subtitle} />
+    &lt;/div>
+  )
+}
+
+export default Page;
+
+
+ == x ==
+ ABAIXO SEGUE UM EXEMPLO DE SIMULAÇÃO DE CONTEXTO 
+ PARA LEVAR AS INFORMAÇÕES DE FORMA MAIS FÁCIL 
+ PARA OS COMPONENTES
+ --- 
+
+ "use client"
+
+const Page = () => {
+
+  const Subtitle = () => {
+    const ctx = 'Titulo';
+    return(
+      &lt;p>{ctx}&lt;/p>
+    );
+  }
+
+  const Title = () => {
+    const ctx = 'Titulo';
+    return(
+      &lt;h1 className="text-4xl">{ctx}&lt;/h1>
+    );
+  }
+
+  const Header = () => {
+    return(
+      &lt;header>
+        &lt;Title />
+        &lt;Subtitle />
+      &lt;/header>
+    );
+  }
+
+  const pageInfo = {
+    title: 'Titulo Maroto',
+    subtitle: 'Subtitulo muito legal e bem feito'
+  }
+  
+  return (
+    &lt;div className='container mx-auto text-white p-9'>
+      &lt;Contexto pageInfo={pageInfo}>
+        &lt;Header />
+      &lt;/Contexto>
+    &lt;/div>
+  )
+}
+
+export default Page;
 
 <hr>
 <h3>#13: Criando um Context</h3>
+
+
+Etapa 1 criada. o contexto: CountContext
+Etapa 2, montar o provider: &lt;CountContext.Provider value={CountInitialData}>
+Etapa 3, como é que eu leio as informações do meu contexto
+
+
+Etapa 1 criada. o contexto: CountContext
+-- 
+aula01_effects_next/src/contexts/CountContext.ts 
+--- 
+
+import { createContext } from "react";
+
+export const CountInitialData = 150;
+export const CountContext = createContext(CountInitialData); // parte 1 criada. o contexto.
+
+
+
+Etapa 2, montar o provider: &lt;CountContext.Provider value={CountInitialData}>
+--- 
+aula01_effects_next/src/app/page.tsx
+--- 
+
+"use client"
+
+import { Header } from "@/components/Header";
+import { CountContext, CountInitialData } from "@/contexts/CountContext";
+
+const Page = () => {
+  
+  return (
+    &lt;div className='container mx-auto text-white p-9'>
+
+      &lt;CountContext.Provider value={CountInitialData}>
+        &lt;Header />
+      &lt;/CountContext.Provider>
+      
+      {/* 
+      Etapa 1 criada. o contexto: CountContext
+      Etapa 2, montar o provider: &lt;CountContext.Provider value={CountInitialData}>
+      Etapa 3, como é que eu leio as informações do meu contexto
+      */}
+      
+    &lt;/div>
+  )
+}
+
+export default Page;
+
+
+
+Etapa 3, como é que eu leio as informações do meu contexto
+--- 
+aula01_effects_next/src/components/OnlineUsers.tsx
+--- 
+import { CountContext } from "@/contexts/CountContext";
+import { useContext } from "react";
+
+export const OnlineUsers = () => {
+
+    const count = useContext(CountContext);
+
+    return(
+        &lt;p>Online: {count}&lt;/p>
+    );
+}
+
+
+
+--- 
+aula01_effects_next/src/components/Header.tsx
+--- 
+import { OnlineUsers } from "./OnlineUsers";
+
+export const Header = () => {
+    return(
+
+        &lt;header>
+            &lt;h1 className="text-3xl">Título da página&lt;/h1>
+            &lt;OnlineUsers />
+        &lt;/header>
+    );
+}
+
 
 
 <hr>
