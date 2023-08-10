@@ -19,8 +19,14 @@ const Page = () => {
         text: addField.trim()
       }
     });
-
     setAddField('');
+  }
+
+  const handleDoneCheckbox = (id: number) => {
+    dispatch({
+      type: "toggleDone",
+      payload: { id }
+    });
   }
 
   return (
@@ -45,7 +51,16 @@ const Page = () => {
       </div>
       <ul className="p-4 m-4">
         {list.map((item) => (
-          <li key={item.id}>{item.id} - {item.text}</li>
+          <li key={item.id} className="flex justify-between border-b border-b-gray-900 pb-2 mb-2">
+            <input type="checkbox" 
+              className="w-6 h-6 mr-4"
+              defaultChecked={item.done}
+              onClick={() => handleDoneCheckbox(item.id)}
+            />
+            <p className="flex-1 txt-lg">{item.text}</p>
+            <button  className="mx-2">Editar</button>
+            <button  className="mx-2 text-red-700">Excluir</button>
+          </li>
         ))}
       </ul>
 
