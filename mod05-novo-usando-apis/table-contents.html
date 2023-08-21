@@ -483,7 +483,70 @@ export default function Home() {
 
 
 <hr>
-<h3>#10: Enviando arquivos via Fetch 1#11: Enviando arquivos via Fetch 2</h3>
+<h3>#10: Enviando arquivos via Fetch 1</h3>
+
+Como enviar um arquivo.
+Envio de uma imagem + legenda.
+
+==x== 
+mod05_novo_apis/src/app/page.tsx
+--- 
+"use client";
+
+import { User } from '@/types/User';
+import { useEffect, useRef, useState } from 'react';
+
+export default function Home() {
+  
+  const [legendInput, setLegendInput] = useState('');
+  const fileInputRef = useRef&lt;HTMLInputElement>(null);
+
+  const handleFileSend = async ()=>{
+    // precisa primeiro verificar se existe um arquivo 
+    // e se ele faz parte do grupo de arquivos válidos/aceitáveis
+
+    if(fileInputRef.current?.files && fileInputRef.current?.files.length > 0){
+      const fileItem = fileInputRef.current.files[0];
+
+      console.log(fileItem);
+
+    } else {
+      alert('Selecione um arquivo');
+    }
+
+  }
+
+  return (
+    &lt;div className="container mx-auto p-6">
+      
+      &lt;h1 className='text-2xl'>Upload de Imagem&lt;/h1>
+      &lt;div className='max-w-md flex flex-col gap-3 border border-dotted border-white p-3 mt-4'>
+        &lt;input 
+          ref={fileInputRef}
+          type="file" 
+        />
+        &lt;input 
+          type="text" 
+          placeholder="Digite uma legenda" 
+          className='p-3 bg-white-white rounded-md text-black' 
+          value={legendInput}
+          onChange={e => setLegendInput(e.target.value)}
+        />
+        &lt;button 
+          className='bg-black px-4 py-1 border border-black rounded-lg text-white'
+          onClick={handleFileSend}
+        >Enviar imagem&lt;/button>
+      &lt;/div>
+
+    &lt;/div>
+  );
+}
+
+
+
+<hr>
+<h3>#11: Enviando arquivos via Fetch 2</h3>
+
 
 <hr>
 <h3>#12: Introdução ao Axios</h3>

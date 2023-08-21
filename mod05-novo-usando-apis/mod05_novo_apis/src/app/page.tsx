@@ -1,68 +1,49 @@
 "use client";
 
 import { User } from '@/types/User';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Home() {
+  
+  const [legendInput, setLegendInput] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState<User[]>([]);
+  const handleFileSend = async ()=>{
+    // precisa primeiro verificar se existe um arquivo 
+    // e se ele faz parte do grupo de arquivos válidos/aceitáveis
 
-  const getUsers = async () => {
-    setLoading(true);
-    try {
+    if(fileInputRef.current?.files && fileInputRef.current?.files.length > 0){
+      const fileItem = fileInputRef.current.files[0];
 
-      const resposta = await fetch('https://jsonplaceholder.typicode.com/users');
-      const json = await resposta.json();
-      setUsers(json);
+      console.log(fileItem);
 
-    } catch(err) {
-      console.log('DEU ALGO ERRADO.')
+    } else {
+      alert('Selecione um arquivo');
     }
-    setLoading(false);
-  }
-
-  useEffect(() => {
-
-    getUsers();
-
-  }, []);
-
-  const handleAddNewPost = async ()=>{
-    
-    const resposta = await fetch('https://jsonplaceholder.typicode.com/posts', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8'
-      },
-      body: JSON.stringify({
-        title: "Post de Teste",
-        body: "Corpo de teste",
-        userId: 99
-      })
-    });
-
-    const json = await resposta.json();
-    console.log(json);
 
   }
-
 
   return (
     <div className="container mx-auto p-6">
-      <button onClick={handleAddNewPost} className='border rounded-lg bg-gray-500 px-2 my-2'>Adicionar Novo Post</button>
-      <h1 className="text-3xl">Lista de usuários</h1>
-
-      {loading && "Carregando..."}
-      {!loading && users.length > 0 &&
-        <ul>
-          {users.map(item => (
-          <li key={item.id}>{item.name} - ({item.email}). {item.address.city} </li>
-          ))}
-        </ul>
-      }
-      {!loading && users.length === 0 && 'Não há users para exibir.'}
-
+      
+      <h1 className='text-2xl'>Upload de Imagem</h1>
+      <div className='max-w-md flex flex-col gap-3 border border-dotted border-white p-3 mt-4'>
+        <input 
+          ref={fileInputRef}
+          type="file" 
+        />
+        <input 
+          type="text" 
+          placeholder="Digite uma legenda" 
+          className='p-3 bg-white-white rounded-md text-black' 
+          value={legendInput}
+          onChange={e => setLegendInput(e.target.value)}
+        />
+        <button 
+          className='bg-black px-4 py-1 border border-black rounded-lg text-white'
+          onClick={handleFileSend}
+        >Enviar imagem</button>
+      </div>
 
     </div>
   );
