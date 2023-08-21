@@ -15,7 +15,34 @@ export default function Home() {
     if(fileInputRef.current?.files && fileInputRef.current?.files.length > 0){
       const fileItem = fileInputRef.current.files[0];
 
-      console.log(fileItem);
+      const allowed = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif"
+      ]
+
+      if(allowed.includes(fileItem.type)){
+
+        const data = new FormData();
+        data.append('arquivoDaImage', fileItem);
+        data.append('legend', legendInput);
+
+        const res = await fetch('https://jsonplaceholder.typicode.com/posts', {
+          method: 'POST',
+          headers: {
+            'Content-type': 'multipart/form-data'
+          },
+          body: data
+        });
+
+        const json = await res.json();
+        console.log(json);
+
+      } else {
+        alert('Arquivo incompatível.');
+        console.log('Arquivo incompatível.');
+      }
 
     } else {
       alert('Selecione um arquivo');
