@@ -8,22 +8,23 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
 
+  const getUsers = async () => {
+    setLoading(true);
+    try {
+
+      const resposta = await fetch('https://jsonplaceholder.typicode.com/users');
+      const json = await resposta.json();
+      setUsers(json);
+
+    } catch(err) {
+      console.log('DEU ALGO ERRADO.')
+    }
+    setLoading(false);
+  }
+
   useEffect(() => {
-    
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((resposta) => {
-        return resposta.json();
-      })
-      .then(json => {
-        setUsers(json);
-      })
-      .catch(() => {
-        console.log('Deu erro');
-      })
-      .finally(()=>{
-        setLoading(false);
-        console.log('Terminou toda a requisição')
-      })
+
+    getUsers();
 
   }, []);
 
