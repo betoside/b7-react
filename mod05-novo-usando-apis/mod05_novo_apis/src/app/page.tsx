@@ -1,76 +1,32 @@
 "use client";
 
-import { User } from '@/types/User';
-import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
 
 export default function Home() {
-  
-  const [legendInput, setLegendInput] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSend = async ()=>{
-    // precisa primeiro verificar se existe um arquivo 
-    // e se ele faz parte do grupo de arquivos válidos/aceitáveis
+  const handleGetPost = async ()=>{
+    // fetch > then > catch > finally
+    // async > await
+    // https://jsonplaceholder.typicode.com/comments?postId=1
+    // https://jsonplaceholder.typicode.com/posts
 
-    if(fileInputRef.current?.files && fileInputRef.current?.files.length > 0){
-      const fileItem = fileInputRef.current.files[0];
+    const requestParams = {
+      postId: 1,
+      sort: 'desc'
+    };
 
-      const allowed = [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/gif"
-      ]
+    const response = await axios.get('https://jsonplaceholder.typicode.com/comments', {
+      params: requestParams
+    })
 
-      if(allowed.includes(fileItem.type)){
-
-        const data = new FormData();
-        data.append('arquivoDaImage', fileItem);
-        data.append('legend', legendInput);
-
-        const res = await fetch('https://jsonplaceholder.typicode.com/posts', {
-          method: 'POST',
-          headers: {
-            'Content-type': 'multipart/form-data'
-          },
-          body: data
-        });
-
-        const json = await res.json();
-        console.log(json);
-
-      } else {
-        alert('Arquivo incompatível.');
-        console.log('Arquivo incompatível.');
-      }
-
-    } else {
-      alert('Selecione um arquivo');
-    }
+    console.log(response.data);
 
   }
 
   return (
     <div className="container mx-auto p-6">
-      
-      <h1 className='text-2xl'>Upload de Imagem</h1>
-      <div className='max-w-md flex flex-col gap-3 border border-dotted border-white p-3 mt-4'>
-        <input 
-          ref={fileInputRef}
-          type="file" 
-        />
-        <input 
-          type="text" 
-          placeholder="Digite uma legenda" 
-          className='p-3 bg-white-white rounded-md text-black' 
-          value={legendInput}
-          onChange={e => setLegendInput(e.target.value)}
-        />
-        <button 
-          className='bg-black px-4 py-1 border border-black rounded-lg text-white'
-          onClick={handleFileSend}
-        >Enviar imagem</button>
-      </div>
+
+      <button onClick={handleGetPost} className='border rounded-lg bg-gray-500 px-2 my-2'>Pegar Posts</button>
 
     </div>
   );
