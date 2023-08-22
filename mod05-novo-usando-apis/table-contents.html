@@ -729,9 +729,111 @@ mod05_novo_apis/src/app/page.tsx
 
 <hr>
 <h3>#14: Fazendo POST/PUT/DELETE com Axios</h3>
+--- 
+mod05_novo_apis/src/app/page.tsx
+--- 
+"use client";
+
+import axios from 'axios';
+
+export default function Home() {
+
+  const handleAddPost = async ()=>{
+
+    const requestParams = {
+      userId: 98,
+      title: 'Titulo do post',
+      body: 'Corpo do post'
+    };
+                        //  axios.put('https://jsonplaceholder.typicode.com/posts'
+                     //  axios.delete('https://jsonplaceholder.typicode.com/posts'
+    const response = await axios.post('https://jsonplaceholder.typicode.com/posts', {
+      params: requestParams
+    })
+
+    console.log(response.data);
+
+    if(response.data.id){
+      console.log('Inseriu bonitinho');
+    } else {
+      console.log('Não Inseriu, algo aconteceu.');
+    }
+
+  }
+
+  return (
+    &lt;div className="container mx-auto p-6">
+
+      &lt;button onClick={handleAddPost} className='border rounded-lg bg-gray-500 px-2 my-2'>Inserir Post&lt;/button>
+
+    &lt;/div>
+  );
+}
+
 
 <hr>
 <h3>#15: Criando instância do Axios</h3>
+É como se criasse um arquivo de configuração 
+personalizado para uma situação pensada.
+
+--- 
+mod05_novo_apis/src/utils/api.ts
+--- 
+
+import axios from "axios";
+
+export const api = axios.create({
+    baseURL: 'https://jsonplaceholder.typicode.com'
+});
+
+--- 
+mod05_novo_apis/src/app/page.tsx
+--- 
+"use client";
+
+import { api } from '@/utils/api';
+import axios from 'axios';
+
+export default function Home() {
+
+  const hanleDeletePosts = async ()=>{
+    // ...
+  }
+
+  const hanleGetPosts = async ()=>{
+    // ...
+  }
+
+  const handleAddPost = async ()=>{
+
+    const requestParams = {
+      userId: 98,
+      title: 'Titulo do post',
+      body: 'Corpo do post'
+    };
+
+    const response = await api.post('/posts',{
+      params: requestParams
+    });
+
+    if(response.data.id){
+      console.log('Inseriu bonitinho');
+    } else {
+      console.log('Não Inseriu, algo aconteceu.');
+    }
+
+  }
+
+  return (
+    &lt;div className="container mx-auto p-6">
+
+      &lt;button onClick={handleAddPost} className='border rounded-lg bg-gray-500 px-2 my-2'>Inserir Post&lt;/button>
+
+    &lt;/div>
+  );
+}
+
+
 
 <hr>
 <h3>#16: Envio de arquivos (FormData) com Axios</h3>
