@@ -834,12 +834,80 @@ export default function Home() {
 }
 
 
-
 <hr>
 <h3>#16: Envio de arquivos (FormData) com Axios</h3>
 
+-- 
+mod05_novo_apis/src/app/page.tsx
+-- 
+"use client";
+
+import { useRef } from "react";
+import axios from "axios";
+
+export default function Home() {
+
+  const fileInputRef = useRef&lt;HTMLInputElement>(null);
+
+  const handleSendFile = async ()=>{
+
+    if( fileInputRef.current?.files && fileInputRef.current.files.length > 0 ){
+
+      const file = fileInputRef.current.files[0];
+      const data = new FormData();
+
+      data.append('name', 'Boniek');
+      data.append('file', file);
+
+      const response = await axios.post('https://jsonplaceholder.typicode.com/posts', data, {
+        // não precisa fazer o envio do header abaixo pq o 
+        // axios fazer essa modificação indentificando se necessário.
+        // é um exemplo do terceiro parâmetro
+        headers: {
+          'Content-type': 'multipart/form-data'
+        }
+      });
+      console.log(response.data);
+      // o endpoint não aceita mas o programa vai fazer o upload.
+      // possível acompanha no browser
+    }
+
+  }
+
+  return (
+    &lt;div className="container mx-auto p-6">
+      
+      &lt;input 
+        ref={fileInputRef}
+        type="file" 
+      />
+
+      &lt;button onClick={handleSendFile} className='border rounded-lg bg-gray-500 px-2 my-2'>Enviar&lt;/button>
+
+    &lt;/div>
+  );
+}
+
+
 <hr>
 <h3>#17: Cancelando uma requisição com Axios</h3>
+
+o recurso não é do axios mas funciona muito bem no axios.
+
+é necessário cancelar uma requisição quando ela demora mais ou muito.
+é possível cancelar uma requisição.
+
+A lógica:
+
+    Criar a requisição 
+    Criar um controlador,
+    é possível associar mais de 1 requisição a um controlador.
+
+    A solicitação de cancelamento vai para o controlador.
+
+Usar 'network > throttling'
+
+
 
 </pre>
 
